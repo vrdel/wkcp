@@ -1,0 +1,79 @@
+" gvim stuff
+""""""""""""
+" set gfn=Dejavu\ Sans\ Mono\ 10
+" set gfn=Consolas\ 11
+set gfn=PragmataPro\ 10
+" set gfn=PragmataPro\ 11
+set guioptions=aeigmt
+
+" term=rxvt-unicode -> bright colors
+" set t_Co=256
+" set term=rxvt-256color
+
+"unmap! <backspace>
+"unmap! <C-backspace>
+map! <silent> <C-backspace> <space><C-O>db<backspace>
+
+set background=light
+"colorscheme solarized
+"colorscheme gruvbox
+colorscheme autumnleaf 
+"colorscheme Tomorrow-Night-Bright
+"colorscheme molokai
+
+" colorscheme molokai
+" colorscheme dawn
+" highlight Normal guibg=#dde0d5
+
+" Mon 31-07-2006 01:15:51 
+" garbled output on :Man ($PAGER=vim_man_pager.sh). this should
+" fix it
+autocmd BufReadPost,BufNewFile * let $PAGER="less"
+:AirlineTheme papercolor
+:AirlineRefresh
+
+hi Folded term=reverse cterm=reverse ctermfg=0 ctermbg=9 guifg=black guibg=#c8e8ff
+hi FoldColumn term=reverse ctermfg=0 ctermbg=9 guifg=black guibg=#c8e8ff
+
+"hi def otlTab0 ctermfg=black ctermbg=darkred gui=none guifg=#eeeeee guibg=#914D56
+hi def otlTab0 cterm=bold ctermfg=red ctermbg=none gui=bold  guifg=#ffffff guibg=#000000
+" hi def otlTab1 ctermfg=black ctermbg=darkblue gui=none guifg=#eeeeee guibg=#4D5F91
+hi def otlTab1 ctermfg=blue ctermbg=none gui=bold guifg=#ffffff guibg=#b83333
+hi def otlTab2 ctermfg=green ctermbg=none gui=bold guifg=#ffffff guibg=#3378b8
+hi def otlTab2 ctermfg=black ctermbg=darkgreen gui=bold guifg=#ffffff guibg=#33b852
+hi def otlTab3 ctermfg=yellow gui=bold guibg=#33b8b6 guifg=#ffffff
+hi def otlTab4 ctermfg=red gui=bold term=reverse guifg=#ffffff guibg=#b8a433
+hi def otlTab5 ctermfg=cyan gui=bold  term=reverse guifg=#ffffff guibg=#000000
+hi def otlTab6 ctermfg=magenta gui=bold term=reverse guifg=#ffffff guibg=#b83333
+hi def otlTab7 ctermfg=darkcyan gui=bold term=reverse guifg=#ffffff guibg=#3378b8
+hi def otlTab8 ctermfg=darkred gui=bold term=reverse guifg=#ffffff guibg=#33b852
+hi def otlTab9 ctermfg=darkblue gui=bold term=reverse guifg=#ffffff guibg=#33b8b6
+hi def otlTab10 ctermfg=darkgreen gui=bold term=reverse guifg=#ffffff guibg=#b8a433
+hi def otlTab11 ctermfg=darkmagenta gui=bold term=reverse guifg=#ffffff guibg=#000000
+hi def otlTab12 ctermfg=grey gui=bold term=reverse guifg=#ffffff guibg=#b83333
+hi def otlTodo ctermbg=yellow ctermfg=black
+
+hi def otlCode guifg=yellow ctermfg=yellow
+hi def otlLNK guifg=#A6619A ctermfg=darkmagenta
+hi def otlPict guibg=#6274AB cterm=underline
+"hi def otlTag1 ctermbg=209 ctermfg=232 guibg=#4a8144 guifg=#eeeeee
+"hi def otlTag1 ctermfg=209 guibg=#4a8144 guifg=#eeeeee cterm=underline,bold
+hi def otlTag1 ctermfg=209  guifg=red gui=bold,underline cterm=underline
+hi def otlStart ctermfg=119 guifg=#1BA118 gui=bold,underline cterm=underline
+"hi def otlIt gui=underline cterm=underline
+"hi def otlTag2 ctermbg=185 ctermfg=232 guibg=#81444c guifg=#eeeeee
+"hi def otlTag2 ctermfg=185 guibg=#81444c guifg=#eeeeee cterm=underline,bold
+hi def otlTag2 ctermfg=185 guifg=darkblue gui=bold,underline cterm=underline
+hi def otlBold cterm=bold gui=bold,underline, guifg=#303030
+hi def otlUnderline cterm=underline ctermbg=lightgrey ctermfg=black gui=underline,italic guibg=#BFFEFE guifg=black
+hi def otlTag3 ctermbg=191 ctermfg=232 guibg=yellow guifg=#202020 gui=bold
+"hi def otlTag4 ctermbg=210 ctermfg=232 guibg=#814481 gui=bold cterm=bold
+"hi def otlTag4 ctermbg=210 ctermfg=232 guibg=#814481 gui=bold cterm=bold
+hi def otlTag4 ctermbg=210 ctermfg=232 guibg=darkred guifg=white gui=bold
+hi def otlTextLeader guifg=darkgrey ctermfg=lightgrey
+hi def otlTodo ctermbg=yellow ctermfg=black guifg=#202020 guibg=#F14970 cterm=none
+hi def otlURL  ctermbg=white ctermfg=black guibg=#455278 guifg=#eeeeee
+
+hi CursorLine ctermbg=white ctermfg=black guibg=#D0D0D0 guifg=#000000
+
+hi DiffText  guibg=red guifg=white gui=bold
