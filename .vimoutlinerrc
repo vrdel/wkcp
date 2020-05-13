@@ -1,0 +1,243 @@
+"Extra mappings *****************************************************
+"This mapping is fold-level and fold-state dependent 
+"map <S-Down> dd p
+"map <S-Up> dd <up>P
+
+"Common Plugins
+so ~/.vimoutliner/vo_checkbox.vim
+so ~/.vimoutliner/vo_hoist.vim
+
+"User Preferences ***************************************************
+let maplocalleader=",,"		" this is prepended to VO key mappings
+
+" This setting loads the checkboxes, tags and smart_paste plugins as default.
+"let g:vo_modules_load = "checkbox:tags:smart_paste"
+
+"setlocal ignorecase			" searches ignore case
+setlocal formatoptions=tcrq
+setlocal comments="" 
+setlocal comments=s:\|\ -,m:\|\ \ ,s:\|\ *,m:\|\ \ ,s:\:\ -,m:\:\ \ ,s:\:\ *,m:\:\ \ ,f:*\ ,f:-\,:\:
+setlocal smartcase			" searches use smart case
+setlocal wrapmargin=5
+setlocal tw=88
+setlocal tabstop=2      " tabstop and shiftwidth must match
+setlocal shiftwidth=2    " values from 2 to 8 work well
+setlocal background=dark " for dark backgrounds
+setlocal wrap
+setlocal foldlevel=1
+
+function! TitleSearch(argregex)
+	let savelinenr = line(".")
+
+	if search(a:argregex, 'ws') != savelinenr
+		normal zo
+		normal zz
+	endif
+
+endfunction
+
+function! TAGSearch(argtag)
+	let savelinenr = line(".")
+
+	if search("TAGS=(.*\\zs\\<" . a:argtag . "\\>\\ze.*)", 's') != savelinenr 
+		normal zO
+		normal zz
+	endif
+
+endfunction
+
+function! GenTAGS(...)
+	let c1 = system("echo $RANDOM") % 25 + 97
+	let c2 = system("echo $RANDOM") % 25 + 97
+	let @t = "TAGS=(" . printf("%c%c", c1, c2) . strftime("%d%m%g") . ")"
+
+	if a:1 == "paste"
+		normal! "tp
+	endif
+
+endfunction
+
+function! ToggleTextWidth(...)
+	if &l:tw == a:2
+		let &l:tw=0
+		echo "Textwidth set to 0"
+		set wrapmargin=0
+		set nowrap
+		set sidescroll=5
+		set listchars+=precedes:<,extends:>
+	else
+		let &l:tw = str2nr(a:2)
+		echo "Textwidth set to 88"
+		set wrap
+		set wrapmargin=5
+	endif
+endfunction
+
+function! NewEntry(title, ...)
+	call GenTAGS("nopaste")
+	let linenr = search("^# Tracking", 'n')
+	let line = getline(linenr + 2)
+
+	if match(line, strftime("%a %d-%m-%Y")) < 0
+		call append(linenr + 1, "\t\t# " . strftime("%a %d-%m-%Y"))
+	endif
+
+	call append(linenr + 2, "\t\t\t# " . a:title)
+	call append(linenr + 3, "\t\t\t\t: " . getreg('t'))
+
+	let preftabs = split(getline("."), ':\|#.*')
+	let saveline = line(".")
+
+	if exists("a:1") && a:1 == "onloc"
+		call append(line(".") - 1, preftabs[0] . "# " . a:title)
+		call append(line(".") - 1, preftabs[0] . "\t:")
+		call append(line(".") - 1, preftabs[0] . "\t: " . getreg('t'))
+		call append(line(".") - 1, preftabs[0] . "\t:")
+	else
+		call append(line(".") - 1, preftabs[0] . ": " . getreg('t'))
+	endif
+	
+	call cursor(saveline, 1)
+
+endfunction
+
+"Hoisting ***********************************************************
+"Uncomment and set to 1 to debug hoisting
+let g:hoistParanoia=0
+
+syntax clear
+
+" Folded Section Colors
+hi Folded    ctermfg=darkcyan ctermbg=none
+hi FoldColumn   ctermfg=darkyellow
+
+syn match otlText12 /^\t\{12}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText12
+syn match otlText11 /^\t\{11}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText12
+syn match otlText10 /^\t\{10}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText11
+syn match otlText9 /^\t\{9}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText10
+syn match otlText8 /^\t\{8}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText9
+syn match otlText7 /^\t\{7}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText8
+syn match otlText6 /^\t\{6}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText7
+syn match otlText5 /^\t\{5}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText6
+syn match otlText4 /^\t\{4}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText5
+syn match otlText3 /^\t\{3}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText4
+syn match otlText2 /^\t\{2}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText3
+syn match otlText1 /^\t\{1}[|:].*/               contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTextLeader,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlText2
+syn match otlTab12 /^\t\{12}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlURL display nextgroup=otlTab12,otlTab11,otlText1
+syn match otlTab11 /^\t\{11}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlURL display nextgroup=otlTab11,otlTab10,otlText1
+syn match otlTab10 /^\t\{10}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlURL display nextgroup=otlTab10,otlTab9,otlText1
+syn match otlTab9 /^\t\{9}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlURL display nextgroup=otlTab9,otlTab8,otlText1
+syn match otlTab8 /^\t\{8}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab8,otlTab9,otlTab7,otlText1
+syn match otlTab7 /^\t\{7}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab7,otlTab8,otlTab6,otlText1
+syn match otlTab6 /^\t\{6}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab6,otlTab7,otlTab5,otlText1
+syn match otlTab5 /^\t\{5}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab5,otlTab6,otlTab4,otlText1
+syn match otlTab4 /^\t\{4}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab4,otlTab5,otlTab3,otlText1
+syn match otlTab3 /^\t\{3}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab3,otlTab4,otlTab2,otlText1
+syn match otlTab2 /^\t\{2}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab2,otlTab3,otlTab1,otlText1
+syn match otlTab1 /^\t\{1}[^\t\|:^;].*/       contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab1,otlTab2,otlTab0,otlText1
+syn match otlTab0 /^[^\t|:].*/             contains=otlTodo,otlStart,otlIt,otlTag1,otlTag2,otlTag3,otlTag4,otlBold,otlUnderline,otlURL,otlPict,otlLNK display nextgroup=otlTab0,otlTab1,otlText1
+syn match otlTodo /\<\(TODO\|XXX\|NOTE\|FIX\(ME\)\?\)\>/    contained
+" syn match otlTag2  /\[[^]]*]/              contained
+syn match otlTag2  /\^\S[^\^]*\S\^/              contained
+syn match otlURL /[uU][Rr][lL]\: .[^]]*/
+" syn match otlTag1  /\[\[[^]]*]]/              contained
+syn match otlTag1  /\~\S[^\~]*\S\~/              contained
+syn match otlBold /\*\S[^\*]*\S\*/              contained
+syn match otlUnderline /__\S\(.*\)\S__/              contained
+syn match otlIt /|[^|]*|/              contained
+syn match otlTag3  /{\S[^{]*\S\}/              contained
+syn match otlStart  /\;\S[^\;]*\S\;/              contained
+syn match otlTag4  /\`\S[^`]*\S\`/              contained
+syn match otlLNK /\([Ii][Dd]=.*\|<[Uu][Rr][Ll]:.*>\|TAGS=\(.*\)\)/
+syn match otlPict /Slika_\w*/ contained
+syn match otlTextLeader /^\t*|/   contained
+
+if &background == "dark"
+  hi def otlCode guifg=yellow ctermfg=yellow
+  hi def otlLNK guifg=#A6619A ctermfg=darkmagenta
+  hi def otlPict guibg=#6274AB cterm=underline
+  "hi def otlTag1 ctermbg=209 ctermfg=232 guibg=#4a8144 guifg=#eeeeee
+  "hi def otlTag1 ctermfg=209 guibg=#4a8144 guifg=#eeeeee cterm=underline,bold
+	hi def otlTag1 ctermfg=209  guifg=#df5f5f gui=bold,underline cterm=underline
+	hi def otlStart ctermfg=119 guifg=#6ADF5F gui=bold,underline cterm=underline
+	"hi def otlIt gui=underline cterm=underline
+  "hi def otlTag2 ctermbg=185 ctermfg=232 guibg=#81444c guifg=#eeeeee
+  "hi def otlTag2 ctermfg=185 guibg=#81444c guifg=#eeeeee cterm=underline,bold
+	hi def otlTag2 ctermfg=185 guifg=#afaf00 gui=bold,underline cterm=underline
+	hi def otlBold cterm=bold gui=bold
+	hi def otlUnderline ctermbg=189 ctermfg=black gui=italic guibg=#A7B7CC guifg=black
+  hi def otlTag3 ctermbg=191 ctermfg=232 guibg=#BAB462 guifg=#202020 gui=bold
+  "hi def otlTag4 ctermbg=210 ctermfg=232 guibg=#814481 gui=bold cterm=bold
+  "hi def otlTag4 ctermbg=210 ctermfg=232 guibg=#814481 gui=bold cterm=bold
+  hi def otlTag4 ctermbg=210 ctermfg=232 guibg=#81444c guifg=#eeeeee gui=bold
+  hi def otlTextLeader guifg=darkgrey ctermfg=lightgrey
+  hi def otlTodo ctermbg=yellow ctermfg=black guifg=#202020 guibg=#F14970 cterm=none
+  hi def otlURL  ctermbg=white ctermfg=black guibg=#455278 guifg=#eeeeee
+else
+  hi def otlCode  ctermfg=yellow
+  hi def otlLNK  ctermfg=darkmagenta
+  hi def otlPict ctermbg=white ctermfg=black  cterm=bold
+  hi def otlTag1 ctermfg=green 
+  hi def otlTag2 ctermfg=red 
+  hi def otlTag3 ctermbg=magenta ctermfg=black  
+  hi def otlTag4 ctermbg=cyan ctermfg=black  
+  hi def otlTextLeader  ctermfg=lightgrey
+  hi def otlTodo ctermbg=lightyellow 
+  hi def otlURL  ctermbg=white ctermfg=black 
+  hi def OtlText2 
+  hi def OtlText3 
+  hi def OtlText4 
+  hi def OtlText5 
+  hi def OtlText6 
+  hi def OtlText7 
+  hi def OtlText8 
+  hi def OtlText9 
+
+endif
+
+" Default is to have bold headers
+if !exists("g:otl_bold_headers")
+  let g:otl_bold_headers = 1
+endif
+
+if g:otl_bold_headers
+  "hi def otlTab0 ctermfg=black ctermbg=darkred gui=none guifg=#eeeeee guibg=#914D56
+  "hi def otlTab0 cterm=bold ctermfg=red ctermbg=none gui=bold  guifg=#d0d0d0 guibg=#505050
+  hi def otlTab0 cterm=bold ctermfg=red ctermbg=none gui=bold guifg=#d0d0d0 guibg=#7f0000
+  " hi def otlTab1 ctermfg=black ctermbg=darkblue gui=none guifg=#eeeeee guibg=#4D5F91
+	hi def otlTab1 ctermfg=blue ctermbg=none guifg=#80a0ff
+  hi def otlTab2 ctermfg=green ctermbg=none guifg=#7fcf7f
+  hi def otlTab3 ctermfg=yellow guifg=#dfaf00
+  hi def otlTab4 ctermfg=red term=reverse guifg=#df875f
+  hi def otlTab5 ctermfg=cyan term=reverse guifg=#10bfbf
+  hi def otlTab6 ctermfg=magenta term=reverse guifg=#ff5faf
+  hi def otlTab7 ctermfg=darkcyan term=reverse guifg=#10bfbf
+  hi def otlTab8 ctermfg=darkred term=reverse guifg=#df875f
+  hi def otlTab9 ctermfg=darkblue term=reverse guifg=#80a0ff
+  hi def otlTab10 ctermfg=darkgreen term=reverse guifg=#6fbf6f
+  hi def otlTab11 ctermfg=darkmagenta term=reverse guifg=#ff5faf
+  hi def otlTab12 ctermfg=grey term=reverse guifg=#d0d0d0
+  hi def otlTodo ctermbg=yellow ctermfg=black
+else
+  hi def otlTab0 ctermfg=white ctermbg=darkred cterm=bold  
+  hi def otlTab1 ctermfg=4 cterm=NONE  
+  hi def otlTab2 ctermfg=2 cterm=NONE  
+  hi def otlTab3 ctermfg=3 cterm=NONE  
+  hi def otlTab4 ctermfg=5 cterm=NONE  
+  hi def otlTab5 ctermfg=6 cterm=NONE  
+  hi def otlTab6 ctermfg=1 cterm=NONE  
+  hi def otlTab7 ctermfg=4 cterm=NONE  
+  hi def otlTab8 ctermfg=2 cterm=NONE  
+  hi def otlTab9 ctermfg=3 cterm=NONE  
+  hi def otlTodo ctermbg=3 cterm=NONE
+endif
+
+hi def IndentGuidesEven guibg=#171D30 ctermbg=black
+hi def IndentGuidesOdd guibg=#272E42 ctermbg=none
+hi def SignColumn ctermbg=black
+
+
+"Spelling Error Colors
+"hi spellErr,BadWord gui=underline guifg=darkyellow cterm=underline ctermfg=darkyellow
+
+" EOF vim: ft=vim
