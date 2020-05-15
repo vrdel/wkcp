@@ -1,5 +1,5 @@
 "Extra mappings *****************************************************
-"This mapping is fold-level and fold-state dependent 
+"This mapping is fold-level and fold-state dependent
 "map <S-Down> dd p
 "map <S-Up> dd <up>P
 
@@ -15,8 +15,8 @@ let maplocalleader=",,"		" this is prepended to VO key mappings
 
 "setlocal ignorecase			" searches ignore case
 setlocal formatoptions=tcrq
-setlocal comments="" 
-setlocal comments=s:\|\ -,m:\|\ \ ,s:\|\ *,m:\|\ \ ,s:\:\ -,m:\:\ \ ,s:\:\ *,m:\:\ \ ,f:*\ ,f:-\,:\:
+setlocal comments=""
+setlocal comments=s:\|\ -,m:\|\ \ ,s:\|\ *,m:\|\ \ ,s:\:\ -,m:\:\ \ ,s:\:\ *,m:\:\ \ ,f:*\ ,f:-\,:\:,b:#
 setlocal smartcase			" searches use smart case
 setlocal wrapmargin=5
 setlocal tw=88
@@ -39,7 +39,7 @@ endfunction
 function! TAGSearch(argtag)
 	let savelinenr = line(".")
 
-	if search("TAGS=(.*\\zs\\<" . a:argtag . "\\>\\ze.*)", 's') != savelinenr 
+	if search("TAGS=(.*\\zs\\<" . a:argtag . "\\>\\ze.*)", 's') != savelinenr
 		normal zO
 		normal zz
 	endif
@@ -96,7 +96,7 @@ function! NewEntry(title, ...)
 	else
 		call append(line(".") - 1, preftabs[0] . ": " . getreg('t'))
 	endif
-	
+
 	call cursor(saveline, 1)
 
 endfunction
@@ -177,21 +177,21 @@ else
   hi def otlCode  ctermfg=yellow
   hi def otlLNK  ctermfg=darkmagenta
   hi def otlPict ctermbg=white ctermfg=black  cterm=bold
-  hi def otlTag1 ctermfg=green 
-  hi def otlTag2 ctermfg=red 
-  hi def otlTag3 ctermbg=magenta ctermfg=black  
-  hi def otlTag4 ctermbg=cyan ctermfg=black  
+  hi def otlTag1 ctermfg=green
+  hi def otlTag2 ctermfg=red
+  hi def otlTag3 ctermbg=magenta ctermfg=black
+  hi def otlTag4 ctermbg=cyan ctermfg=black
   hi def otlTextLeader  ctermfg=lightgrey
-  hi def otlTodo ctermbg=lightyellow 
-  hi def otlURL  ctermbg=white ctermfg=black 
-  hi def OtlText2 
-  hi def OtlText3 
-  hi def OtlText4 
-  hi def OtlText5 
-  hi def OtlText6 
-  hi def OtlText7 
-  hi def OtlText8 
-  hi def OtlText9 
+  hi def otlTodo ctermbg=lightyellow
+  hi def otlURL  ctermbg=white ctermfg=black
+  hi def OtlText2
+  hi def OtlText3
+  hi def OtlText4
+  hi def OtlText5
+  hi def OtlText6
+  hi def OtlText7
+  hi def OtlText8
+  hi def OtlText9
 
 endif
 
@@ -219,16 +219,16 @@ if g:otl_bold_headers
   hi def otlTab12 ctermfg=grey term=reverse guifg=#d0d0d0
   hi def otlTodo ctermbg=yellow ctermfg=black
 else
-  hi def otlTab0 ctermfg=white ctermbg=darkred cterm=bold  
-  hi def otlTab1 ctermfg=4 cterm=NONE  
-  hi def otlTab2 ctermfg=2 cterm=NONE  
-  hi def otlTab3 ctermfg=3 cterm=NONE  
-  hi def otlTab4 ctermfg=5 cterm=NONE  
-  hi def otlTab5 ctermfg=6 cterm=NONE  
-  hi def otlTab6 ctermfg=1 cterm=NONE  
-  hi def otlTab7 ctermfg=4 cterm=NONE  
-  hi def otlTab8 ctermfg=2 cterm=NONE  
-  hi def otlTab9 ctermfg=3 cterm=NONE  
+  hi def otlTab0 ctermfg=white ctermbg=darkred cterm=bold
+  hi def otlTab1 ctermfg=4 cterm=NONE
+  hi def otlTab2 ctermfg=2 cterm=NONE
+  hi def otlTab3 ctermfg=3 cterm=NONE
+  hi def otlTab4 ctermfg=5 cterm=NONE
+  hi def otlTab5 ctermfg=6 cterm=NONE
+  hi def otlTab6 ctermfg=1 cterm=NONE
+  hi def otlTab7 ctermfg=4 cterm=NONE
+  hi def otlTab8 ctermfg=2 cterm=NONE
+  hi def otlTab9 ctermfg=3 cterm=NONE
   hi def otlTodo ctermbg=3 cterm=NONE
 endif
 
