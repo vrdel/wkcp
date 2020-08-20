@@ -39,17 +39,17 @@ then
 	ext="png"
 else
 	ext="jpg"
-fi	
+fi
 
 if [ -z "$gvim" ]
 then
 	gvim -f -U ~/.gvimrc-otl-white -c ':set foldlevel=999999' -c ':TOhtml' \
 	-c ':wa!' -c ':quitall' "${PWD}/${1}" && \
 	wkhtmltoimage --quality 100 file:///"${CURDIR}/${1}.html" "${1%.*}".$ext
-	rm -f "${CURDIR}/${1}.html"   
+	rm -f "${CURDIR}/${1}.html"
 else
 	wkhtmltoimage --quality 100 file:///"${CURDIR}/${1}.html" "${1%.*}".$ext
-	rm -f "${CURDIR}/${1}.html"   
+	rm -f "${CURDIR}/${1}.html"
 fi
 
 if [ "$notitle" ]
@@ -57,5 +57,5 @@ then
 	galaview.sh "${1%.*}".$ext
 else
 	montit.py -s xs -t "${1%.*}" "${PWD}/${1%.*}".$ext "${PWD}/${1%.*}".$ext
-	galaview.sh "${1%.*}".$ext 
+	galaview.sh "${1%.*}".$ext
 fi
