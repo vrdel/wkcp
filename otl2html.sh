@@ -6,16 +6,41 @@ function gvim_otl2html()
 	-c ':wa!' -c ':quitall' $1
 }
 
-if [ $# -eq 0 ]
+while getopts 'id:ht:' OPTION
+do
+	case $OPTION in
+		i) img=1 ;;
+		d) doc="$OPTARG" ;;
+		t) target="$OPTARG" ;;
+		h)
+			printf "Usage: %s
+              [-i should process and copy images embedded into otl]
+              [-d target otl]
+              [-t copy img to specified directory]
+              file.otl\n" $(basename $0) >&2
+			exit 2
+			;;
+	esac
+done
+shift "$(( $OPTIND - 1 ))"
+
+if [ ! -z "$doc" ]
 then
-	for i in *.otl
+	gvim_otl2html $doc
+fi
+
+if [ ! -z "$img" ]
+then
+	imgstrs=$(grep -o "myimg:.*" $doc)
+	sleep 1
+	echo $imgstrs | tr " " "\n" | while read img
 	do
-		gvim_otl2html $i
-	done
-else
-	until [ -z "$1" ]
-	do
-		gvim_otl2html $1
-		shift
+		targetimg=${img#"myimg:"}
+		echo $targetimg
+		cp -f $targetimg .
+		cp -f $(basename $targetimg) $target/${PWD#*documents/}/
+		searchstr="s/myimg:.*$(basename $targetimg)/<img src=$(basename $targetimg)>/g"
+		cat "$doc".html | sed -r "$searchstr" > "$doc".html.1
+		mv -f "$doc".html.1 "$doc".html
 	done
 fi
