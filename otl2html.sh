@@ -2,7 +2,7 @@
 
 function gvim_otl2html()
 {
-	gvim -U ~/.gvimrc-otl-white -c ':set foldlevel=9999999999 autoread' -c ':TOhtml' \
+	gvim -U ~/.gvimrc-otl-white -c ':set foldlevel=9999999999' -c ':TOhtml' \
 	-c ':wa!' -c ':quitall' $1
 }
 
