@@ -2,7 +2,7 @@
 
 function gvim_otl2html()
 {
-	gvim -U ~/.gvimrc-otl-white -c ':set foldlevel=9999999999' -c ':TOhtml' \
+	gvim -U ~/.gvimrc-otl-white -c ':set foldlevel=9999999999 autoread' -c ':TOhtml' \
 	-c ':wa!' -c ':quitall' $1
 }
 
@@ -26,13 +26,17 @@ shift "$(( $OPTIND - 1 ))"
 
 if [ ! -z "$doc" ]
 then
+	if [ -e "$doc".html ]
+	then
+		rm "$doc".html
+	fi
 	gvim_otl2html $doc
 fi
 
 if [ ! -z "$img" ]
 then
 	imgstrs=$(grep -o "myimg:.*" $doc)
-	sleep 1
+	sleep 2
 	echo $imgstrs | tr " " "\n" | while read img
 	do
 		targetimg=${img#"myimg:"}
