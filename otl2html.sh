@@ -28,7 +28,7 @@ if [ ! -z "$doc" ]
 then
 	if [ -e "$doc".html ]
 	then
-		rm "$doc".html
+		rm -f "$doc".html
 	fi
 	gvim_otl2html $doc
 fi
