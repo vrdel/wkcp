@@ -14,6 +14,6 @@ filename=$(zenity --title "url2otl" --entry --text="Page to be converted:\n\t$ur
 
 if [ -n "$filename" ];
 then
-	elinksdump.sh "$url" "$HOME/documents/Web2Wiki/""$filename" -w | \
+	elinksdump.sh "$url" "$HOME/documents/Web2Wiki/""web-$filename" -w | \
 	zenity --progress --pulsate --text='Finished' --no-cancel
 fi
