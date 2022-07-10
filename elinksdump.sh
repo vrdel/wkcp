@@ -11,4 +11,11 @@ then
 fi
 
 echo "$1" >> $file
-txt2otl.sh $file && rm -f $file
+
+if [[ -z "$3" || "$3" == "-o" ]]
+then
+	txt2otl.sh $file && rm -f $file
+elif [[ "$3" == "-w" ]]
+then
+	mv $file web-$file.wiki
+fi
