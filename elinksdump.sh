@@ -17,5 +17,6 @@ then
 	txt2otl.sh $file && rm -f $file
 elif [[ "$3" == "-w" ]]
 then
-	mv $file web-$file.wiki
+	sed -i -e "s/^   //g" $file
+	mv $file $file.wiki
 fi
