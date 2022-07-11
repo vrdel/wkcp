@@ -14,6 +14,7 @@ echo "$1" >> $file
 
 if [[ -z "$3" || "$3" == "-o" ]]
 then
+	sed -i -e "s/^   //g" $file
 	txt2otl.sh $file && rm -f $file
 elif [[ "$3" == "-w" ]]
 then
