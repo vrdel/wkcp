@@ -10,7 +10,7 @@ else
 	url=$(xclip -o -selection clipboard)
 fi
 
-filename=$(zenity --title "url2otl" --entry --text="Page to be converted:\n\t$url\n\nEnter OTL filename:" | sed 's/ /_/g')
+filename=$(zenity --title "url2otl" --entry --text="Page to be converted:\n\t$url\n\nEnter WIKI filename:" | sed 's/ /_/g')
 
 if [ -n "$filename" ];
 then
