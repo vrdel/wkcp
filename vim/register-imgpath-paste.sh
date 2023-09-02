@@ -2,17 +2,19 @@
 
 # vrdel
 
-while getopts 'hmow' OPTION
+while getopts 'hmowv' OPTION
 do
 	case $OPTION in
 		m) md=1 ;;
 		o) otl=1 ;;
 		w) wiki=1 ;;
+		v) move=1 ;;
 		h)
 			printf "Usage: %s
               [-m generate md image placeholder]
               [-o generate otl image placeholder]
               [-w generate vimwiki image placeholder]
+              [-v move instead of copy img in folder]
               file.md,otl,wiki\n" $(basename $0) >&2
 			exit 2
 			;;
@@ -21,24 +23,31 @@ done
 shift "$(( $OPTIND - 1 ))"
 
 file=$(xclip -o -selection clipboard)
+file=${file/user\//$(whoami)\/}
+
+oper="cp"
+if [ ! -z "$move" ]
+then
+	oper="mv"
+fi
 
 if [ ! -z "$md" ]
 then
-	cp -f $file . &> /dev/null
+	${oper} -f $file . &> /dev/null
 	str="![$(basename $file)]($(basename $file))"
 	echo $str
 fi
 
 if [ ! -z "$otl" ]
 then
-	cp -f $file . &> /dev/null
+	${oper} -f $file . &> /dev/null
 	str="myimg:$(basename $file)"
 	echo -e "\t: $str"
 fi
 
 if [ ! -z "$wiki" ]
 then
-	cp -f $file . &> /dev/null
+	${oper} -f $file . &> /dev/null
 	str="{{myimg:$(basename $file)}}"
 	echo -e "$str"
 fi
