@@ -20,8 +20,17 @@ then
 	img=${img# *}
 elif echo $args | grep -q '(.*)'
 then
+	if echo $args | grep -q '%'
+	then
+		args=${args//%/\\x}""
+	fi
 	img=${args#*(}
 	img=${img%)}
+fi
+
+if echo $img | grep -q '.otl.png'
+then
+	img=${img/.otl/}
 fi
 
 feh --scale-down $img &
