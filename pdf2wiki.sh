@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 pdftotext -nopgbrk -layout "$1"
 mv "${1%.*}".txt "${1%.*}".wiki

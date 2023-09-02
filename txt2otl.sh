@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 cp ${1} "${1%.*}".otl
 sed -i -e "s/^/\t: /g" "${1%.*}".otl
