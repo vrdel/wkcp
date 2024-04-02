@@ -26,6 +26,10 @@ then
 	fi
 	img=${args#*(}
 	img=${img%)}
+elif echo $args | grep -q '\[\[.*\]\]'
+then
+	img=${args#*\[\[}
+	img=${img%\]\]}
 fi
 
 if echo $img | grep -q '.otl.png'
@@ -33,4 +37,14 @@ then
 	img=${img/.otl/}
 fi
 
-feh --scale-down $img &
+if echo $img | grep -q '.mmd.png'
+then
+	img=${img/.mmd/}
+fi
+
+if echo $img | grep -q "^/"
+then
+	feh --scale-down "$img" &
+else
+	feh --scale-down "$PWD/$img" &
+fi
