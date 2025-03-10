@@ -47,8 +47,6 @@ then
 	img=${img/.mmd/}
 fi
 
-echo $img > ~/open-img
-
 if echo $img | grep -q "^/"
 then
 	feh --scale-down "$img" &
