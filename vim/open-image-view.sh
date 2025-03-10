@@ -20,12 +20,17 @@ then
 	img=${img# *}
 elif echo $args | grep -q '(.*)'
 then
+	if echo $args | grep -q '%20'
+	then
+		args=${args//%20/ }""
+	fi
 	if echo $args | grep -q '%'
 	then
 		args=${args//%/\\x}""
 	fi
 	img=${args#*(}
 	img=${img%)}
+	img=${img%\)\'}
 elif echo $args | grep -q '\[\[.*\]\]'
 then
 	img=${args#*\[\[}
@@ -41,6 +46,8 @@ if echo $img | grep -q '.mmd.png'
 then
 	img=${img/.mmd/}
 fi
+
+echo $img > ~/open-img
 
 if echo $img | grep -q "^/"
 then
