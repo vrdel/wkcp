@@ -3,6 +3,7 @@
 # vrdel
 # dependency: feh
 
+IFS=''
 args=''
 
 for a in $*
@@ -34,7 +35,7 @@ then
 elif echo $args | grep -q '\[\[.*\]\]'
 then
 	img=${args#*\[\[}
-	img=${img%\]\]}
+	img=${img%\]\]*}
 fi
 
 if echo $img | grep -q '.otl.png'
