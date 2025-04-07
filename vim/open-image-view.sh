@@ -50,7 +50,7 @@ fi
 
 if echo $img | grep -q "^/"
 then
-	feh --scale-down "$img" &
+	feh --scale-down -g 800x600+150+200 "$img" &
 else
-	feh --scale-down "$PWD/$img" &
+	feh --scale-down -g 800x600+150+200 "$PWD/$img" &
 fi
