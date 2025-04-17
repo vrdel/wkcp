@@ -1,0 +1,52 @@
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.9"
+copykitten = "*"
+
+[tool.poetry.group.devel]
+optional = true
+
+[tool.poetry.group.devel.dependencies]
+build = "*"
+ipdb = "*"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cpatt"
+dynamic = ["version"]
+authors = [
+	{ name = "Daniel Vrcic", email = "daniel.vrcic@gmail.com" }
+]
+description = """
+		Helper tool to manage Markdown and Vimwiki attachment
+		image and file links to exchange them between wiki files
+		using clipboard
+"""
+classifiers = [
+	"License :: OSI Approved :: Apache Software License",
+	"Operating System :: POSIX",
+	"Programming Language :: Python :: 3.9",
+]
+
+[tool.setuptools]
+packages = [
+    'cpatt',
+]
+include-package-data = true
+
+[tool.setuptools.package-dir]
+cpatt = "modules/"
+
+[tool.setuptools.data-files]
+"" = ["pyproject.toml", "poetry.lock"]
+"bin" = [
+    "bin/cpatt",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "version.vernum" }
