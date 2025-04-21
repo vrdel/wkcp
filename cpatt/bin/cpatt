@@ -2,9 +2,9 @@
 
 import sys
 import argparse
-import re
 
-MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
+import cpatt.image
+import cpatt.text
 
 
 def main():
@@ -13,17 +13,19 @@ def main():
     parser_image = subparsers.add_parser("image", help="Handle images")
     parser_text = subparsers.add_parser("text", help="Handle text")
 
-    parser_image.add_argument("--copy", dest="copy", type=bool, default=False,
+    parser_image.add_argument("--copy", dest="copyimg", default=False, action='store_true',
                               required=False, help="Copy extracted image path to clipboard")
-    parser_text.add_argument("--copy", dest="copy", type=bool, default=False,
+    parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
                              required=False, help="Copy text to clipboard")
     args = parser.parse_args()
-    import ipdb; ipdb.set_trace()
+
+    stdin_content = sys.stdin.read()
+    sys.stdin = open("/dev/tty")
 
     if args.command == "image":
-        handle_image(args)
+        cpatt.image.handle(args, stdin_content)
     elif args.command == "text":
-        handle_text(args)
+        cpatt.text.handle(args, stdin_content)
 
 
 if __name__ == '__main__':
