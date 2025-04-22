@@ -21,10 +21,12 @@ def main():
                               required=False, help="Build vimwiki image link")
     parser_image.add_argument("-m", dest="pastepathmarkdown", default=False, action='store_true',
                               required=False, help="Build markdown image link")
+    parser_image.add_argument("-mw", dest="pastepathmarkdownwikilink", default=False, action='store_true',
+                              required=False, help="Build markdown image wikilink")
     parser_image.add_argument("--copyimg", dest="copyimg", default=False, action='store_true',
                               required=False, help="Copy image content to clipboard")
     parser_image.add_argument("--link", dest="wikilink", nargs='+',
-                              required=True, help="Image paths that will be extracted, transformed and copied to clipboard")
+                              required=False, help="Image paths that will be extracted, transformed and copied to clipboard")
     parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
                              required=False, help="Copy text to clipboard")
     args = parser.parse_args()

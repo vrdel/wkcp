@@ -1,6 +1,8 @@
 import re
 import os
 import copykitten
+import shutil
+
 from PIL import Image
 
 
@@ -33,10 +35,11 @@ def _extract_imgpaths(links):
 def handle(args):
     preprocess_links = list()
 
-    for link in args.wikilink:
-        preprocess_links.append(
-            link.strip("\\\'")
-        )
+    if args.wikilink:
+        for link in args.wikilink:
+            preprocess_links.append(
+                link.strip("\\\'")
+            )
 
     if args.copypath:
         image_path = _extract_imgpaths(preprocess_links)
@@ -50,3 +53,15 @@ def handle(args):
                 pil_image = pil_image.convert("RGBA")
             pixels = pil_image.tobytes()
             copykitten.copy_image(pixels, pil_image.width, pil_image.height)
+    elif args.pastepath:
+        image_path = copykitten.paste()
+        try:
+            shutil.copy2(image_path, os.getcwd())
+            if args.pastepathmarkdownwikilink:
+                print("![[{0}]]".format(os.path.basename(image_path)))
+            elif args.pastepathvimwiki:
+                print("{{myimg:{0}}}".format(os.path.basename(image_path)))
+            else:
+                print("![{0}]({0})".format(os.path.basename(image_path)))
+        except FileNotFoundError:
+            pass
