@@ -16,6 +16,18 @@ def _prepend_path(path_array):
     return '\n'.join(temp_ip)
 
 
+def _extract_imgpaths(links):
+    image_path = MARKDOWN_IMAGE_PATTERN.findall(''.join(links))
+    if image_path:
+        return _prepend_path(image_path)
+    else:
+        image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(links))
+        if image_path:
+            return _prepend_path(image_path)
+
+    return None
+
+
 def handle(args):
     preprocess_links = list()
 
@@ -25,10 +37,6 @@ def handle(args):
         )
 
     if args.copypath:
-        image_path = MARKDOWN_IMAGE_PATTERN.findall(''.join(preprocess_links))
+        image_path = _extract_imgpaths(preprocess_links)
         if image_path:
-            copykitten.copy(_prepend_path(image_path))
-        else:
-            image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(preprocess_links))
-            if image_path:
-                copykitten.copy(_prepend_path(image_path))
+            copykitten.copy(image_path)
