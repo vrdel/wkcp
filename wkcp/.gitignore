@@ -1,6 +1,0 @@
-MANIFEST
-build/
-dist/
-*__pycache__*
-.ropeproject
-*.log
