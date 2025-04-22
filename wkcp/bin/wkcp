@@ -3,12 +3,12 @@
 import sys
 import argparse
 
-import cpatt.image
-import cpatt.text
+import wkcp.image
+import wkcp.text
 
 
 def main():
-    parser = argparse.ArgumentParser(description="cpatt - Copy/paste and handle text and image attachments from markdowns and vimwikis")
+    parser = argparse.ArgumentParser(description="wkcp - Copy/paste and handle text and image attachments from markdowns and vimwikis")
     subparsers = parser.add_subparsers(help="Subcommands", dest="command")
     parser_image = subparsers.add_parser("image", help="Handle images")
     parser_text = subparsers.add_parser("text", help="Handle text")
@@ -23,9 +23,9 @@ def main():
     sys.stdin = open("/dev/tty")
 
     if args.command == "image":
-        cpatt.image.handle(args, stdin_content)
+        wkcp.image.handle(args, stdin_content)
     elif args.command == "text":
-        cpatt.text.handle(args, stdin_content)
+        wkcp.text.handle(args, stdin_content)
 
 
 if __name__ == '__main__':
