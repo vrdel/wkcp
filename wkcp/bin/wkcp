@@ -13,8 +13,10 @@ def main():
     parser_image = subparsers.add_parser("image", help="Handle images")
     parser_text = subparsers.add_parser("text", help="Handle text")
 
-    parser_image.add_argument("--copy", dest="copyimg", default=False, action='store_true',
+    parser_image.add_argument("--copypath", dest="copypath", default=False, action='store_true',
                               required=False, help="Copy extracted image path to clipboard")
+    parser_image.add_argument("--copyimg", dest="copyimg", default=False, action='store_true',
+                              required=False, help="Copy image content to clipboard")
     parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
                              required=False, help="Copy text to clipboard")
     args = parser.parse_args()
