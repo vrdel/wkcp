@@ -17,11 +17,18 @@ def _prepend_path(path_array):
 
 
 def handle(args):
+    preprocess_links = list()
+
+    for link in args.wikilink:
+        preprocess_links.append(
+            link.strip("\\\'")
+        )
+
     if args.copypath:
-        image_path = MARKDOWN_IMAGE_PATTERN.findall(''.join(args.wikilink))
+        image_path = MARKDOWN_IMAGE_PATTERN.findall(''.join(preprocess_links))
         if image_path:
             copykitten.copy(_prepend_path(image_path))
         else:
-            image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(wikilink))
+            image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(preprocess_links))
             if image_path:
                 copykitten.copy(_prepend_path(image_path))
