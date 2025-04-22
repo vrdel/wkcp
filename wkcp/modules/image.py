@@ -1,6 +1,8 @@
 import re
 import os
 import copykitten
+from PIL import Image
+
 
 MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
 WIKILINK_IMAGE_PATTERN = re.compile(r'!\[\[(.*?)\]\]')
@@ -40,3 +42,11 @@ def handle(args):
         image_path = _extract_imgpaths(preprocess_links)
         if image_path:
             copykitten.copy(image_path)
+    elif args.copyimg:
+        image_path = _extract_imgpaths(preprocess_links)
+        for image in image_path.split("\n"):
+            pil_image = Image.open(image)
+            if pil_image.mode != "RGBA":
+                pil_image = pil_image.convert("RGBA")
+            pixels = pil_image.tobytes()
+            copykitten.copy_image(pixels, pil_image.width, pil_image.height)
