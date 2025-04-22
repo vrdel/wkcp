@@ -35,17 +35,20 @@ classifiers = [
 
 [tool.setuptools]
 packages = [
-    'cpatt',
+    'wkcp',
 ]
 include-package-data = true
 
 [tool.setuptools.package-dir]
-cpatt = "modules/"
+wkcp = "modules/"
 
 [tool.setuptools.data-files]
 "" = ["pyproject.toml", "poetry.lock"]
 "bin" = [
     "bin/wkcp",
+]
+"helpers" = [
+	"helpers/wkcp.sh"
 ]
 
 [tool.setuptools.dynamic]
