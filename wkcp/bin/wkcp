@@ -17,17 +17,16 @@ def main():
                               required=False, help="Copy extracted image path to clipboard")
     parser_image.add_argument("--copyimg", dest="copyimg", default=False, action='store_true',
                               required=False, help="Copy image content to clipboard")
+    parser_image.add_argument("--link", dest="wikilink", nargs='+',
+                              required=True, help="Image paths that will be extracted, transformed and copied to clipboard")
     parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
                              required=False, help="Copy text to clipboard")
     args = parser.parse_args()
 
-    stdin_content = sys.stdin.read()
-    sys.stdin = open("/dev/tty")
-
     if args.command == "image":
-        wkcp.image.handle(args, stdin_content)
+        wkcp.image.handle(args)
     elif args.command == "text":
-        wkcp.text.handle(args, stdin_content)
+        wkcp.text.handle(args)
 
 
 if __name__ == '__main__':

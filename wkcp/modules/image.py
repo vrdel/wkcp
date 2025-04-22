@@ -16,12 +16,12 @@ def _prepend_path(path_array):
     return '\n'.join(temp_ip)
 
 
-def handle(args, stdin_content):
+def handle(args):
     if args.copypath:
-        image_path = MARKDOWN_IMAGE_PATTERN.findall(stdin_content)
+        image_path = MARKDOWN_IMAGE_PATTERN.findall(''.join(args.wikilink))
         if image_path:
             copykitten.copy(_prepend_path(image_path))
         else:
-            image_path = WIKILINK_IMAGE_PATTERN.findall(stdin_content)
+            image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(wikilink))
             if image_path:
                 copykitten.copy(_prepend_path(image_path))
