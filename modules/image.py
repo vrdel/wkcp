@@ -3,6 +3,7 @@ import os
 import copykitten
 import shutil
 
+from datetime import datetime
 from PIL import Image
 
 
@@ -69,7 +70,9 @@ def handle(args):
         try:
             pixels, width, height = copykitten.paste_image()
             image = Image.frombytes(mode="RGBA", size=(width, height), data=pixels)
-            image_filename = f"wkcp-pasted-img.png"
+            now = datetime.now()
+            datetime_string = now.strftime("%y%m%d-%H%M")
+            image_filename = f"wkcp-pi-{datetime_string}.png"
             image.save(image_filename)
             try:
                 if args.pastepathmarkdownwikilink:
