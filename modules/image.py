@@ -65,3 +65,20 @@ def handle(args):
                 print("![{0}]({0})".format(os.path.basename(image_path)))
         except FileNotFoundError:
             pass
+    elif args.pasteimg:
+        try:
+            pixels, width, height = copykitten.paste_image()
+            image = Image.frombytes(mode="RGBA", size=(width, height), data=pixels)
+            image_filename = f"wkcp-pasted-img.png"
+            image.save(image_filename)
+            try:
+                if args.pastepathmarkdownwikilink:
+                    print("![[{0}]]".format(os.path.basename(image_filename)))
+                elif args.pastepathvimwiki:
+                    print("{{myimg:{0}}}".format(os.path.basename(image_filename)))
+                else:
+                    print("![{0}]({0})".format(os.path.basename(image_filename)))
+            except FileNotFoundError:
+                pass
+        except copykitten.CopykittenError as exc:
+            pass

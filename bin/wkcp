@@ -17,6 +17,8 @@ def main():
                               required=False, help="Copy extracted image path to clipboard")
     parser_image.add_argument("--pastepath", dest="pastepath", default=False, action='store_true',
                               required=False, help="Copy image to current folder of wiki file and build markdown link")
+    parser_image.add_argument("--pasteimg", dest="pasteimg", default=False, action='store_true',
+                              required=False, help="Dump image from clipboard to current folder of wiki file with generated filename and build link")
     parser_image.add_argument("-w", dest="pastepathvimwiki", default=False, action='store_true',
                               required=False, help="Build vimwiki image link")
     parser_image.add_argument("-m", dest="pastepathmarkdown", default=False, action='store_true',
@@ -27,8 +29,10 @@ def main():
                               required=False, help="Copy image content to clipboard")
     parser_image.add_argument("--link", dest="wikilink", nargs='+',
                               required=False, help="Image paths that will be extracted, transformed and copied to clipboard")
+
     parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
                              required=False, help="Copy text to clipboard")
+
     args = parser.parse_args()
 
     if args.command == "image":
