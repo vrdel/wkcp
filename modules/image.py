@@ -78,7 +78,7 @@ def handle(args):
                 if args.pastepathmarkdownwikilink:
                     print("![[{0}]]".format(os.path.basename(image_filename)))
                 elif args.pastepathvimwiki:
-                    print("{{myimg:{0}}}".format(os.path.basename(image_filename)))
+                    print("{{" + "myimg:{0}".format(os.path.basename(image_filename)) + "}}")
                 else:
                     print("![{0}]({0})".format(os.path.basename(image_filename)))
             except FileNotFoundError:
