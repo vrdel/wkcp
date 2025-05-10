@@ -1,5 +1,6 @@
 [tool.poetry]
-package-mode = false
+package-mode = true
+version = "0"
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -20,6 +21,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "wkcp"
 dynamic = ["version"]
+dependencies = [
+	"copykitten",
+	"pillow"
+]
 authors = [
 	{ name = "Daniel Vrcic", email = "daniel.vrcic@gmail.com" }
 ]
