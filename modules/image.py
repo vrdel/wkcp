@@ -9,6 +9,7 @@ from PIL import Image
 
 MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
 WIKILINK_IMAGE_PATTERN = re.compile(r'!\[\[(.*?)\]\]')
+VIMWIKI_IMAGE_PATTERN = re.compile(r'\{\{myimg:(.*?)\}\}')
 
 
 def _prepend_path(path_array):
@@ -29,6 +30,10 @@ def _extract_imgpaths(links):
         image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(links))
         if image_path:
             return _prepend_path(image_path)
+        else:
+            image_path = VIMWIKI_IMAGE_PATTERN.findall(''.join(links))
+            if image_path:
+                return _prepend_path(image_path)
 
     return None
 
@@ -87,7 +92,9 @@ def handle(args):
             pass
     elif args.deleteimg:
         image_path = _extract_imgpaths(preprocess_links)
-        try:
-            os.remove(image_path)
-        except FileNotFoundError:
-            pass
+        if image_path:
+            try:
+                os.remove(image_path)
+                print("DELETED")
+            except FileNotFoundError:
+                pass
