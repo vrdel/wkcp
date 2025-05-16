@@ -19,6 +19,8 @@ def main():
                               required=False, help="Copy image to current folder of wiki file and build markdown link")
     parser_image.add_argument("--pasteimg", dest="pasteimg", default=False, action='store_true',
                               required=False, help="Dump image from clipboard to current folder of wiki file with generated filename and build link")
+    parser_image.add_argument("--deleteimg", dest="deleteimg", default=False, action='store_true',
+                              required=False, help="Delete image")
     parser_image.add_argument("-w", dest="pastepathvimwiki", default=False, action='store_true',
                               required=False, help="Build vimwiki image link")
     parser_image.add_argument("-m", dest="pastepathmarkdown", default=False, action='store_true',

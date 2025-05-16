@@ -85,3 +85,9 @@ def handle(args):
                 pass
         except copykitten.CopykittenError as exc:
             pass
+    elif args.deleteimg:
+        image_path = _extract_imgpaths(preprocess_links)
+        try:
+            os.remove(image_path)
+        except FileNotFoundError:
+            pass
