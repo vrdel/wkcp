@@ -1,0 +1,3 @@
+let $ALELINTPATH = $HOME . "/my_work/wkcp/lint"
+let b:ale_linters = ['flake8']
+let g:ale_python_flake8_executable =  $ALELINTPATH . '/ale-exe-flake8.sh'
