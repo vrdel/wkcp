@@ -6,6 +6,7 @@ version = "0"
 python = "^3.9"
 copykitten = "*"
 pillow = "*"
+aiohttp = "*"
 
 [tool.poetry.group.devel]
 optional = true
@@ -23,7 +24,8 @@ name = "wkcp"
 dynamic = ["version"]
 dependencies = [
 	"copykitten",
-	"pillow"
+	"pillow",
+	"aiohttp"
 ]
 authors = [
 	{ name = "Daniel Vrcic", email = "daniel.vrcic@gmail.com" }
