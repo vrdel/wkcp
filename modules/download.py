@@ -82,7 +82,12 @@ def handle(args):
     local_files = merge_dicts(local_files)
 
     for ln in lines_with_images:
-        filelines[ln] = "![[{0}]]\n".format(local_files[extract_img(filelines[ln])])
+        if args.markdownwikilink:
+            filelines[ln] = "![[{0}]]\n".format(local_files[extract_img(filelines[ln])])
+        elif args.vimwiki:
+            filelines[ln] = "{{" + "myimg:{0}".format(local_files[extract_img(filelines[ln])]) + "}}\n"
+        else:
+            filelines[ln] = "![{0}]({0})\n".format(local_files[extract_img(filelines[ln])])
 
     with open(args.file[0], 'w') as fp:
         fp.writelines(filelines)

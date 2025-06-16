@@ -40,6 +40,15 @@ def main():
     parser_download.add_argument("--file", dest="file", nargs=1, required=True, help="""Path to file with
                                  attachments that will be downloaded and
                                  replaced with local attachs""")
+    parser_download.add_argument("-w", dest="vimwiki", default=False,
+                                 action='store_true', required=False,
+                                 help="Build vimwiki image link")
+    parser_download.add_argument("-m", dest="markdown", default=False,
+                                 action='store_true', required=False,
+                                 help="Build markdown image link")
+    parser_download.add_argument("-mw", dest="markdownwikilink",
+                                 default=False, action='store_true',
+                                 required=False, help="Build markdown image wikilink")
 
     args = parser.parse_args()
 
