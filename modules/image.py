@@ -1,4 +1,3 @@
-import re
 import os
 import copykitten
 import shutil
@@ -6,36 +5,7 @@ import shutil
 from datetime import datetime
 from PIL import Image
 
-
-MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
-WIKILINK_IMAGE_PATTERN = re.compile(r'!\[\[(.*?)\]\]')
-VIMWIKI_IMAGE_PATTERN = re.compile(r'\{\{myimg:(.*?)\}\}')
-
-
-def _prepend_path(path_array):
-    temp_ip = list()
-    for path in path_array:
-        if not path.startswith('/'):
-            temp_ip.append(f'{os.getcwd()}/{path}')
-        else:
-            temp_ip.append(path)
-    return '\n'.join(temp_ip)
-
-
-def _extract_imgpaths(links):
-    image_path = MARKDOWN_IMAGE_PATTERN.findall(''.join(links))
-    if image_path:
-        return _prepend_path(image_path)
-    else:
-        image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(links))
-        if image_path:
-            return _prepend_path(image_path)
-        else:
-            image_path = VIMWIKI_IMAGE_PATTERN.findall(''.join(links))
-            if image_path:
-                return _prepend_path(image_path)
-
-    return None
+from wkcp.utils import extract_imgpaths
 
 
 def handle(args):
@@ -48,11 +18,11 @@ def handle(args):
             )
 
     if args.copypath:
-        image_path = _extract_imgpaths(preprocess_links)
+        image_path = extract_imgpaths(preprocess_links)
         if image_path:
             copykitten.copy(image_path)
     elif args.copyimg:
-        image_path = _extract_imgpaths(preprocess_links)
+        image_path = extract_imgpaths(preprocess_links)
         for image in image_path.split("\n"):
             pil_image = Image.open(image)
             if pil_image.mode != "RGBA":
@@ -91,7 +61,7 @@ def handle(args):
         except copykitten.CopykittenError as exc:
             pass
     elif args.deleteimg:
-        image_path = _extract_imgpaths(preprocess_links)
+        image_path = extract_imgpaths(preprocess_links)
         if image_path:
             try:
                 os.remove(image_path)
