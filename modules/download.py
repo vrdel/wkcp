@@ -64,6 +64,9 @@ def handle(args):
     for i in range(len(filelines)):
         image = extract_img(filelines[i])
         if image:
+            parsed_url = urlparse(image)
+            if not (parsed_url.scheme or parsed_url.netloc):
+                continue
             lines_with_images.append(i)
             image_links.append(image)
 
