@@ -3,7 +3,7 @@ package-mode = true
 version = "0"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.14"
 copykitten = "*"
 pillow = "*"
 aiohttp = "*"
@@ -42,7 +42,7 @@ description = """
 classifiers = [
 	"License :: OSI Approved :: Apache Software License",
 	"Operating System :: POSIX",
-	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.14",
 ]
 
 [tool.setuptools]
