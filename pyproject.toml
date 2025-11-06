@@ -45,23 +45,22 @@ classifiers = [
 	"Programming Language :: Python :: 3.14",
 ]
 
+[project.scripts]
+wkcp = 'wkcp.console.wkcp:main'
+
 [tool.setuptools]
 packages = [
-    'wkcp',
+	'wkcp',
+	'wkcp.console'
 ]
 include-package-data = true
 
 [tool.setuptools.package-dir]
 wkcp = "modules/"
+"wkcp.console" = "console/"
 
 [tool.setuptools.data-files]
 "" = ["pyproject.toml", "poetry.lock"]
-"bin" = [
-    "bin/wkcp",
-]
-"helpers" = [
-	"helpers/wkcp.sh"
-]
 
 [tool.setuptools.dynamic]
 version = { attr = "version.vernum" }

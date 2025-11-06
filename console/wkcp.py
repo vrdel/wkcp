@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-import sys
 import argparse
 
 import wkcp.image
@@ -58,7 +55,3 @@ def main():
         wkcp.text.handle(args)
     elif args.command == "download":
         wkcp.download.handle(args)
-
-
-if __name__ == '__main__':
-    main()

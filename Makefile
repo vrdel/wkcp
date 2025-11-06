@@ -20,12 +20,13 @@ wheel-devel: clean
 
 clean:
 	rm -f MANIFEST
-	rm -rf dist build
 	rm -rf **/*.pyc
 	rm -rf **/*.pyo
 	rm -rf **/*.pyo
-	rm -rf *.egg-info/
 	rm -rf **/*__pycache__*
+	rm -rf *.egg-info/
+	rm -rf __pycache__
+	rm -rf dist build
 
 
 .PHONY: clean wheel-devel wheel-prod
