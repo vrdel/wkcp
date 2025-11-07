@@ -23,9 +23,9 @@ build-backend = "setuptools.build_meta"
 name = "wkcp"
 dynamic = ["version"]
 dependencies = [
-	"copykitten",
-	"pillow",
-	"aiohttp"
+	"copykitten==2.0.0",
+	"pillow==12.0.0",
+	"aiohttp==3.13.2"
 ]
 authors = [
 	{ name = "Daniel Vrcic", email = "daniel.vrcic@gmail.com" }
