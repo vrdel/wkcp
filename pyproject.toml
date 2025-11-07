@@ -46,18 +46,18 @@ classifiers = [
 ]
 
 [project.scripts]
-wkcp = 'wkcp.console.wkcp:main'
+wkcp = 'wkcp.cmd.wkcp:main'
 
 [tool.setuptools]
 packages = [
 	'wkcp',
-	'wkcp.console'
+	'wkcp.cmd'
 ]
 include-package-data = true
 
 [tool.setuptools.package-dir]
 wkcp = "modules/"
-"wkcp.console" = "console/"
+"wkcp.cmd" = "cmd/"
 
 [tool.setuptools.data-files]
 "" = ["pyproject.toml", "poetry.lock"]
