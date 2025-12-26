@@ -25,6 +25,21 @@ def contains_exception(list):
     return (False, None)
 
 
+def extract_image_links(filelines):
+    lines_with_images = list()
+    image_links = list()
+    for i in range(len(filelines)):
+        image = extract_img(filelines[i])
+        if image:
+            parsed_url = urlparse(image)
+            if not (parsed_url.scheme or parsed_url.netloc):
+                continue
+            lines_with_images.append(i)
+            image_links.append(image)
+
+    return image_links, lines_with_images
+
+
 async def download_image(url):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -59,16 +74,7 @@ def handle(args):
     with open(args.file[0], 'r') as fp:
         filelines = fp.readlines()
 
-    lines_with_images = list()
-    image_links = list()
-    for i in range(len(filelines)):
-        image = extract_img(filelines[i])
-        if image:
-            parsed_url = urlparse(image)
-            if not (parsed_url.scheme or parsed_url.netloc):
-                continue
-            lines_with_images.append(i)
-            image_links.append(image)
+    image_links, lines_with_images = extract_image_links(filelines)
 
     coros = list()
     for image_link in image_links:
