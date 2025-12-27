@@ -2,20 +2,22 @@ import unittest
 
 from unittest import mock
 
-from wkcp.download import handle as download_handle
-from wkcp.download import extract_image_links
+from wkcp.download import DownloadHandle
 
 
-class TestDownload(unittest.IsolatedAsyncioTestCase):
+class ImageLinksExtract(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
-        self.args = mock.Mock()
-        self.args.file = ["tests/251226-the-state-of-python-2025-trends-and-survey-insights--the-py-charm-blog.md"]
-        with open(self.args.file[0], 'r') as fp:
-            self.filelines = fp.readlines()
+        self.patcher1 = mock.patch('wkcp.download.DownloadHandle._download')
+        _ = self.patcher1.start()
+        self.patcher2 = mock.patch('wkcp.download.DownloadHandle._replace_with_local_links')
+        _ = self.patcher2.start()
 
-    def test_image_links(self):
-        ret1, ret2 = extract_image_links(self.filelines)
-        self.assertEqual(ret1, [
+    def test(self):
+        args = mock.Mock()
+        args.file = ["tests/251226-the-state-of-python-2025-trends-and-survey-insights--the-py-charm-blog.md"]
+        dh = DownloadHandle(args)
+
+        self.assertEqual(dh.image_links, [
             'https://blog.jetbrains.com/wp-content/uploads/2025/08/Blog-Featured-1280x720-1-2.png',
             'https://blog.jetbrains.com/wp-content/uploads/2025/08/image-14.png',
             'https://blog.jetbrains.com/wp-content/uploads/2025/08/image-15.png',
@@ -35,8 +37,13 @@ class TestDownload(unittest.IsolatedAsyncioTestCase):
             'https://blog.jetbrains.com/wp-content/uploads/2025/10/PC-social-BlogFeatured-1280x720-1-8.png',
             'https://blog.jetbrains.com/wp-content/uploads/2025/09/PC-social-BlogFeatured-1280x720-2x-8.png'
         ])
-        self.assertEqual(ret2, [16, 30, 44, 54, 76, 116, 122, 138, 165, 177,
-                                189, 276, 284, 288, 290, 294, 298, 302])
+        self.assertEqual(dh.lines_with_images, [16, 30, 44, 54, 76, 116, 122,
+                                                138, 165, 177, 189, 276, 284,
+                                                288, 290, 294, 298, 302])
+
+    def tearDown(self):
+        self.patcher1.stop()
+        self.patcher2.stop()
 
 
 if __name__ == '__main__':

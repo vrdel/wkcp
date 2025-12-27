@@ -43,3 +43,20 @@ def extract_imgpaths(links, path=True):
 
 def extract_img(links):
     return extract_imgpaths(links, path=False)
+
+
+def merge_dicts(dict_list):
+    result = {}
+    for d in dict_list:
+        if d:
+            key, value = next(iter(d.items()))
+            result[key] = value
+    return result
+
+
+def contains_exception(list):
+    for a in list:
+        if isinstance(a, Exception):
+            return (True, a)
+
+    return (False, None)

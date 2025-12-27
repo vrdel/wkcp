@@ -1,8 +1,8 @@
 import argparse
 
-import wkcp.image
 import wkcp.text
-import wkcp.download
+from wkcp.image import ImageHandle
+from wkcp.download import DownloadHandle
 
 
 def main():
@@ -50,8 +50,10 @@ def main():
     args = parser.parse_args()
 
     if args.command == "image":
-        wkcp.image.handle(args)
+        ImageHandle(args)
+
     elif args.command == "text":
         wkcp.text.handle(args)
+
     elif args.command == "download":
-        wkcp.download.handle(args)
+        DownloadHandle(args)

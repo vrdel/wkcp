@@ -8,7 +8,7 @@ from PIL import Image
 from wkcp.utils import extract_imgpaths
 
 
-def handle(args):
+def ImageHandle(args):
     preprocess_links = list()
 
     if args.wikilink:
@@ -21,6 +21,7 @@ def handle(args):
         image_path = extract_imgpaths(preprocess_links)
         if image_path:
             copykitten.copy(image_path)
+
     elif args.copyimg:
         image_path = extract_imgpaths(preprocess_links)
         for image in image_path.split("\n"):
@@ -29,6 +30,7 @@ def handle(args):
                 pil_image = pil_image.convert("RGBA")
             pixels = pil_image.tobytes()
             copykitten.copy_image(pixels, pil_image.width, pil_image.height)
+
     elif args.pastepath:
         image_path = copykitten.paste()
         try:
@@ -41,6 +43,7 @@ def handle(args):
                 print("![{0}]({0})".format(os.path.basename(image_path)))
         except FileNotFoundError:
             pass
+
     elif args.pasteimg:
         try:
             pixels, width, height = copykitten.paste_image()
@@ -58,8 +61,9 @@ def handle(args):
                     print("![{0}]({0})".format(os.path.basename(image_filename)))
             except FileNotFoundError:
                 pass
-        except copykitten.CopykittenError as exc:
+        except copykitten.CopykittenError:
             pass
+
     elif args.deleteimg:
         image_path = extract_imgpaths(preprocess_links)
         if image_path:
