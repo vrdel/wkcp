@@ -27,6 +27,7 @@ clean:
 	rm -rf *.egg-info/
 	rm -rf __pycache__
 	rm -rf dist build
+	rm -rf *.whl
 
 
 .PHONY: clean wheel-devel wheel-prod
