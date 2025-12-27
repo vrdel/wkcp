@@ -9,7 +9,7 @@ def main():
     parser = argparse.ArgumentParser(description="wkcp - Copy/paste and handle text and image attachments from markdowns and vimwikis")
     subparsers = parser.add_subparsers(help="Subcommands", dest="command")
     parser_image = subparsers.add_parser("image", help="Handle images")
-    parser_text = subparsers.add_parser("text", help="Handle text")
+    # parser_text = subparsers.add_parser("text", help="Handle text")
     parser_download = subparsers.add_parser("download", help="Download attachments")
 
     parser_image.add_argument("--copypath", dest="copypath", default=False, action='store_true',
@@ -31,8 +31,8 @@ def main():
     parser_image.add_argument("--link", dest="wikilink", nargs='+',
                               required=False, help="Image paths that will be extracted, transformed and copied to clipboard")
 
-    parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
-                             required=False, help="Copy text to clipboard")
+    # parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
+                             # required=False, help="Copy text to clipboard")
 
     parser_download.add_argument("--file", dest="file", nargs=1, required=True, help="""Path to file with
                                  attachments that will be downloaded and
