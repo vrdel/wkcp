@@ -75,6 +75,7 @@ class ReplaceImageLinksWithLocalImages(unittest.IsolatedAsyncioTestCase):
         self.patcher4 = mock.patch('wkcp.download.aiohttp.ClientSession.get')
         self.mock_httpclient = self.patcher4.start()
         self.mock_httpclient.side_effect = mockHttpGet
+
         args = mock.Mock()
         args.file = ["tests/251226-the-state-of-python-2025-trends-and-survey-insights--the-py-charm-blog.md"]
         _ = DownloadHandle(args)
