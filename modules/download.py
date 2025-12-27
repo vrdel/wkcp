@@ -1,35 +1,32 @@
 import aiohttp
 import asyncio
 
-from wkcp.utils import extract_img, merge_dicts, contains_exception
+from wkcp.utils import extract_img, merge_dicts, contains_exception, build_image_filename
 
-from datetime import datetime
-from pathlib import Path
 from urllib.parse import urlparse
 
 
 async def coro_download_image(url):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            if response.status != 200:
-                raise ValueError(f"Failed to download {url}: HTTP {response.status}")
+    session = aiohttp.ClientSession()
 
-            parsed_url = urlparse(url)
-            path = parsed_url.path
-            extension = Path(path).suffix.lower()
+    async with session.get(url) as response:
+        if response.status != 200:
+            raise ValueError(f"Failed to download {url}: HTTP {response.status}")
 
-            now = datetime.now()
-            datetime_string = now.strftime("%y%m%d-%H%M%S-%f")
-            image_filename = f"wkcp-di-{datetime_string}{extension}"
+        parsed_url = urlparse(url)
+        image_filename = build_image_filename(parsed_url.path)
 
-            with open(image_filename, 'wb') as f:
-                while True:
-                    chunk = await response.content.read()
-                    if not chunk:
-                        break
-                    f.write(chunk)
-            print(f"Downloaded {url} to {image_filename}")
-            return {url: image_filename}
+        with open(image_filename, 'wb') as f:
+            while True:
+                chunk = await response.content.read()
+                if not chunk:
+                    break
+                f.write(chunk)
+        print(f"Downloaded {url} to {image_filename}")
+
+    await session.close()
+
+    return {url: image_filename}
 
 
 async def coro_download_run(coros):

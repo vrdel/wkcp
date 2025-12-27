@@ -1,6 +1,9 @@
 import re
 import os
 
+from datetime import datetime
+from pathlib import Path
+
 MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
 WIKILINK_IMAGE_PATTERN = re.compile(r'!\[\[(.*?)\]\]')
 VIMWIKI_IMAGE_PATTERN = re.compile(r'\{\{myimg:(.*?)\}\}')
@@ -58,5 +61,11 @@ def contains_exception(list):
     for a in list:
         if isinstance(a, Exception):
             return (True, a)
-
     return (False, None)
+
+
+def build_image_filename(path):
+    extension = Path(path).suffix.lower()
+    now = datetime.now()
+    datetime_string = now.strftime("%y%m%d-%H%M%S-%f")
+    return f"wkcp-di-{datetime_string}{extension}"
