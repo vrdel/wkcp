@@ -1,50 +1,50 @@
 import aiohttp
 import asyncio
 
-from wkcp.utils import extract_img, merge_dicts, contains_exception, build_image_filename
-
+from aiohttp import client_exceptions
 from urllib.parse import urlparse
 
-
-async def coro_download_image(url):
-    session = aiohttp.ClientSession()
-
-    async with session.get(url) as response:
-        if response.status != 200:
-            raise ValueError(f"Failed to download {url}: HTTP {response.status}")
-
-        parsed_url = urlparse(url)
-        image_filename = build_image_filename(parsed_url.path)
-
-        with open(image_filename, 'wb') as f:
-            while True:
-                chunk = await response.content.read()
-                if not chunk:
-                    break
-                f.write(chunk)
-        print(f"Downloaded {url} to {image_filename}")
-
-    await session.close()
-
-    return {url: image_filename}
-
-
-async def coro_download_run(coros):
-    return await asyncio.gather(*coros, return_exceptions=True)
+from wkcp.utils import extract_img, merge_dicts, contains_exception, build_image_filename
+from wkcp.exceptions import DownloadError
 
 
 class DownloadHandle:
-    filelines = list()
-    lines_with_images = list()
-    image_links = list()
-
     def __init__(self, args):
         self.args = args
+        self.filelines = list()
+        self.lines_with_images = list()
+        self.image_links = list()
         self._run()
 
     def _read_file(self):
         with open(self.args.file[0], 'r') as fp:
             self.filelines = fp.readlines()
+
+    def _write_content_file(self, content, filename):
+        with open(filename, 'wb') as f:
+            f.write(content)
+
+    async def _coro_download_image(self, url):
+        session = aiohttp.ClientSession()
+
+        try:
+            async with session.get(url) as response:
+                parsed_url = urlparse(url)
+                image_filename = build_image_filename(parsed_url.path)
+                content = await response.content.read()
+                self._write_content_file(content, image_filename)
+                print(f"Downloaded {url} to {image_filename}")
+
+                return {url: image_filename}
+
+        except (client_exceptions.ClientError,
+                client_exceptions.ServerTimeoutError,
+                asyncio.TimeoutError) as exc:
+            errmsg = 'ERROR: ' + f'{repr(exc)}'
+            raise DownloadError(errmsg)
+
+        finally:
+            await session.close()
 
     def _extract_image_links(self):
         for i in range(len(self.filelines)):
@@ -56,22 +56,12 @@ class DownloadHandle:
                 self.lines_with_images.append(i)
                 self.image_links.append(image)
 
-    def _download(self):
+    async def _download(self):
         coros = list()
         for image_link in self.image_links:
-            coros.append(coro_download_image(image_link))
+            coros.append(self._coro_download_image(image_link))
 
-        local_files = asyncio.run(
-            coro_download_run(coros)
-        )
-
-        exc_raised, exc = contains_exception(local_files)
-        if exc_raised:
-            print(local_files)
-            print("Fully or partially unsuccesfull download, exiting...")
-            raise SystemExit(1)
-
-        return local_files
+        return await asyncio.gather(*coros, return_exceptions=True)
 
     def _replace_with_local_links(self, local_files):
         for ln in self.lines_with_images:
@@ -89,7 +79,13 @@ class DownloadHandle:
         self._read_file()
         self._extract_image_links()
 
-        local_files = self._download()
+        local_files = asyncio.run(self._download())
+        exc_raised, exc = contains_exception(local_files)
+        if exc_raised:
+            print("Fully or partially unsuccesfull download, exiting...")
+            print(exc)
+            raise SystemExit(1)
+
         local_files = merge_dicts(local_files)
 
         self._replace_with_local_links(local_files)
