@@ -1,6 +1,6 @@
-FROM python:3-slim
+FROM python:3.14-slim
 
-LABEL org.opencontainers.image.authors=dvrcic@srce.hr
+LABEL org.opencontainers.image.authors=daniel.vrcic@gmail.com
 
 RUN apt-get -y update && apt-get -y upgrade
 
