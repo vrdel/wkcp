@@ -2,6 +2,7 @@ import aiohttp
 import asyncio
 
 from aiohttp import client_exceptions
+from pathlib import Path, PosixPath
 from urllib.parse import urlparse
 
 from wkcp.utils import extract_img, merge_dicts, contains_exception, build_image_filename
@@ -32,9 +33,13 @@ class DownloadHandle:
                 parsed_url = urlparse(url)
                 image_filename = build_image_filename(parsed_url.path)
                 content = await response.content.read()
-                self._write_content_file(content, image_filename)
-                print(f"Downloaded {url} to {image_filename}")
-
+                if Path(self.args.file[0]).parent == PosixPath('.'):
+                    self._write_content_file(content, image_filename)
+                    print(f"Downloaded {url} to {image_filename}")
+                else:
+                    parent = Path(self.args.file[0]).parent
+                    self._write_content_file(content, parent.joinpath(Path(image_filename)).as_posix())
+                    print(f"Downloaded {url} to {parent.joinpath(Path(image_filename)).as_posix()}")
                 return {url: image_filename}
 
         except (client_exceptions.ClientError,
