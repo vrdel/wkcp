@@ -82,7 +82,7 @@ class ReplaceImageLinksWithLocalImages(unittest.IsolatedAsyncioTestCase):
 
     def test(self):
         self.assertTrue(self.mock_writecontentfile.called)
-        self.assertTrue(self.mock_writecontentfile.call_args[0][0], 'image_content')
+        self.assertEqual(self.mock_writecontentfile.call_args[0][0], 'image_content')
         self.assertEqual(self.mock_writecontentfile.call_args_list[17], mock.call('image_content', 'tests/image18.png'))
         self.assertEqual(self.mock_replacewithlocallinks.call_args[0][0]['https://blog.jetbrains.com/wp-content/uploads/2025/08/image-23.png'], 'image11.png')
 
