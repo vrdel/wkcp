@@ -3,6 +3,7 @@ import argparse
 from wkcp.text import TextHandle
 from wkcp.image import ImageHandle
 from wkcp.download import DownloadHandle
+from wkcp.utils import build_image_filename as build_filename
 
 
 def main():
@@ -11,6 +12,7 @@ def main():
     parser_image = subparsers.add_parser("image", help="Handle images")
     # parser_text = subparsers.add_parser("text", help="Handle text")
     parser_download = subparsers.add_parser("download", help="Download attachments")
+    parser_filename = subparsers.add_parser("filename", help="Generate filename")
 
     parser_image.add_argument("--copypath", dest="copypath", default=False, action='store_true',
                               required=False, help="Copy extracted image path to clipboard")
@@ -32,7 +34,7 @@ def main():
                               required=False, help="Image paths that will be extracted, transformed and copied to clipboard")
 
     # parser_text.add_argument("--copy", dest="copytext", type=bool, default=False,
-                             # required=False, help="Copy text to clipboard")
+    #                          required=False, help="Copy text to clipboard")
 
     parser_download.add_argument("--file", dest="file", nargs=1, required=True, help="""Path to file with
                                  attachments that will be downloaded and
@@ -47,6 +49,11 @@ def main():
                                  default=False, action='store_true',
                                  required=False, help="Build markdown image wikilink")
 
+    parser_filename.add_argument("--prefix", dest="customprefix", default=False,
+                                 required=False, help="Build filename with custom prefix")
+    parser_filename.add_argument("--path", dest="extpath", default=False,
+                                 required=True, help="File path whose extension will be extracted")
+
     args = parser.parse_args()
 
     if args.command == "image":
@@ -57,3 +64,6 @@ def main():
 
     elif args.command == "download":
         DownloadHandle(args)
+
+    elif args.command == "filename":
+        print(build_filename(args.extpath, args.customprefix, microsec=False))
