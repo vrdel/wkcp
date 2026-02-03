@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from wkcp.text import TextHandle
 from wkcp.image import ImageHandle
@@ -66,4 +67,4 @@ def main():
         DownloadHandle(args)
 
     elif args.command == "filename":
-        print(build_filename(args.extpath, args.customprefix, microsec=False))
+        sys.stdout.write(build_filename(args.extpath, args.customprefix, microsec=False))
