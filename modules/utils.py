@@ -2,7 +2,7 @@ import re
 import os
 
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PosixPath
 
 MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
 WIKILINK_IMAGE_PATTERN = re.compile(r'!\[\[(.*?)\]\]')
@@ -66,12 +66,20 @@ def contains_exception(list):
 
 def build_image_filename(path, prefix=None, microsec=True):
     extension = Path(path).suffix.lower()
+    parent = Path(path).parent
     now = datetime.now()
     if microsec:
         datetime_string = now.strftime("%y%m%d-%H%M%S-%f")
     else:
         datetime_string = now.strftime("%y%m%d-%H%M%S")
+
     if not prefix:
-        return f"wkcp-di-{datetime_string}{extension}"
+        if parent != PosixPath('.'):
+            return f"{str(parent)}/wkcp-di-{datetime_string}{extension}"
+        else:
+            return f"wkcp-di-{datetime_string}{extension}"
     else:
-        return f"{prefix}-{datetime_string}{extension}"
+        if parent != PosixPath('.'):
+            return f"{str(parent)}/{prefix}-{datetime_string}{extension}"
+        else:
+            return f"{prefix}-{datetime_string}{extension}"
