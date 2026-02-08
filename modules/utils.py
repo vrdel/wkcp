@@ -66,6 +66,19 @@ def contains_exception(list):
 
 def build_image_filename(path, prefix=None, microsec=True):
     extension = Path(path).suffix.lower()
+    now = datetime.now()
+    if microsec:
+        datetime_string = now.strftime("%y%m%d-%H%M%S-%f")
+    else:
+        datetime_string = now.strftime("%y%m%d-%H%M%S")
+    if not prefix:
+        return f"wkcp-di-{datetime_string}{extension}"
+    else:
+        return f"{prefix}-{datetime_string}{extension}"
+
+
+def build_filename(path, prefix=None, microsec=True):
+    extension = Path(path).suffix.lower()
     parent = Path(path).parent
     now = datetime.now()
     if microsec:

@@ -4,7 +4,7 @@ import sys
 from wkcp.text import TextHandle
 from wkcp.image import ImageHandle
 from wkcp.download import DownloadHandle
-from wkcp.utils import build_image_filename as build_filename
+from wkcp.utils import build_filename
 
 
 def main():
