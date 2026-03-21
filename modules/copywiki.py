@@ -36,7 +36,14 @@ def CopyWikiHandle(args):
         return
 
     dest_dir = Path(args.dest)
-    dest_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        dest_dir.mkdir(parents=True, exist_ok=True)
+    except PermissionError:
+        print(f"Error: Permission denied when attempting to create destination directory '{dest_dir}'.")
+        return
+    except Exception as e:
+        print(f"Error: Could not create destination directory '{dest_dir}': {e}")
+        return
 
     with open(source_file, 'r', encoding='utf-8') as f:
         content = f.read()
