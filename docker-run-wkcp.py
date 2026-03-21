@@ -6,10 +6,10 @@ import sys
 def main():
     args = sys.argv[1:]
 
-    filemount = ""
+    filemounts = set()
     for a in args:
         if os.path.isfile(a) and a.startswith('/'):
-            filemount = a
+            filemounts.add(os.path.dirname(a))
 
     # Base docker run command arguments
     cmd = [
@@ -22,9 +22,8 @@ def main():
         "-v", "/tmp/.X11-unix:/tmp/.X11-unix"
     ]
 
-    # If a file was referenced via absolute path, mount its directory
-    if filemount:
-        dir_mount = os.path.dirname(filemount)
+    # If files were referenced via absolute path, mount their directories
+    for dir_mount in filemounts:
         cmd.extend(["-v", f"{dir_mount}:{dir_mount}:rw"])
 
     cmd.extend(["-t", "wkcp"])
