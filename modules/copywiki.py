@@ -72,19 +72,29 @@ def CopyWikiHandle(args):
             print(f"Warning: Referenced image '{actual_img_path}' not found, skipping.")
 
     # Convert or just copy the main wiki file
-    if args.convert_md:
+    if args.convert_md or args.convert_vimwiki:
         try:
             import pypandoc
             
-            # Destination file will have .md suffix
-            dest_file = dest_dir / (source_file.stem + '.md')
-            
-            pypandoc.convert_file(
-                str(source_file), 
-                'markdown', 
-                format='vimwiki', 
-                outputfile=str(dest_file)
-            )
+            if args.convert_md:
+                # Source is vimwiki, dest is md
+                dest_file = dest_dir / (source_file.stem + '.md')
+                pypandoc.convert_file(
+                    str(source_file), 
+                    'markdown', 
+                    format='vimwiki', 
+                    outputfile=str(dest_file)
+                )
+            elif args.convert_vimwiki:
+                # Source is markdown, dest is vimwiki
+                dest_file = dest_dir / (source_file.stem + '.wiki')
+                pypandoc.convert_file(
+                    str(source_file), 
+                    'vimwiki', 
+                    format='markdown', 
+                    outputfile=str(dest_file)
+                )
+
             print(f"Successfully converted and copied to {dest_file}")
         except ImportError:
             print("Error: pypandoc is not installed or pandoc binary is missing.")

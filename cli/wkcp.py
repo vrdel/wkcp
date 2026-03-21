@@ -57,9 +57,10 @@ def main():
     parser_filename.add_argument("--path", dest="extpath", default=False,
                                  required=True, help="File path whose extension will be extracted")
 
-    parser_copywiki.add_argument("--file", dest="file", required=True, help="Path to vimwiki file")
+    parser_copywiki.add_argument("--file", dest="file", required=True, help="Path to markdown/vimwiki file")
     parser_copywiki.add_argument("--dest", dest="dest", required=True, help="Destination folder")
-    parser_copywiki.add_argument("--convert", dest="convert_md", action="store_true", help="Convert vimwiki to markdown using pandoc")
+    parser_copywiki.add_argument("--convert-md", dest="convert_md", action="store_true", help="Convert source to markdown using pandoc")
+    parser_copywiki.add_argument("--convert-vimwiki", dest="convert_vimwiki", action="store_true", help="Convert source to vimwiki using pandoc")
 
     args = parser.parse_args()
 
