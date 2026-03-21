@@ -81,7 +81,7 @@ def CopyWikiHandle(args):
                 dest_file = dest_dir / (source_file.stem + '.md')
                 pypandoc.convert_file(
                     str(source_file),
-                    'gfm+wikilinks_title_after_pipe',
+                    'gfm+wikilinks_title_after_pipe+fenced_code_blocks',
                     format='vimwiki',
                     outputfile=str(dest_file)
                 )
