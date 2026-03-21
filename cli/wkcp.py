@@ -4,6 +4,7 @@ import sys
 from wkcp.text import TextHandle
 from wkcp.image import ImageHandle
 from wkcp.download import DownloadHandle
+from wkcp.copywiki import CopyWikiHandle
 from wkcp.utils import build_filename
 
 
@@ -14,6 +15,7 @@ def main():
     # parser_text = subparsers.add_parser("text", help="Handle text")
     parser_download = subparsers.add_parser("download", help="Download attachments")
     parser_filename = subparsers.add_parser("filename", help="Generate filename")
+    parser_copywiki = subparsers.add_parser("copywiki", help="Copy vimwiki file, optionally convert to markdown and copy referenced images")
 
     parser_image.add_argument("--copypath", dest="copypath", default=False, action='store_true',
                               required=False, help="Copy extracted image path to clipboard")
@@ -55,6 +57,10 @@ def main():
     parser_filename.add_argument("--path", dest="extpath", default=False,
                                  required=True, help="File path whose extension will be extracted")
 
+    parser_copywiki.add_argument("--file", dest="file", required=True, help="Path to vimwiki file")
+    parser_copywiki.add_argument("--dest", dest="dest", required=True, help="Destination folder")
+    parser_copywiki.add_argument("--convert", dest="convert_md", action="store_true", help="Convert vimwiki to markdown using pandoc")
+
     args = parser.parse_args()
 
     if args.command == "image":
@@ -68,3 +74,6 @@ def main():
 
     elif args.command == "filename":
         sys.stdout.write(build_filename(args.extpath, args.customprefix, microsec=False))
+
+    elif args.command == "copywiki":
+        CopyWikiHandle(args)
