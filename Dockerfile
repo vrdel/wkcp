@@ -3,6 +3,9 @@ FROM python:3.14-slim
 LABEL org.opencontainers.image.authors=daniel.vrcic@gmail.com
 
 RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install curl
+RUN curl -L "https://github.com/jgm/pandoc/releases/download/3.6/pandoc-3.6-1-amd64.deb" -o /tmp/pandoc.deb
+RUN apt-get install -y /tmp/pandoc.deb
 
 RUN groupadd user -g 1000 && useradd -u 1000 -g 1000 user -m -d /home/user -s /bin/bash
 
