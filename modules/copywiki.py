@@ -7,12 +7,12 @@ from wkcp.utils import MARKDOWN_IMAGE_PATTERN, WIKILINK_IMAGE_PATTERN, VIMWIKI_I
 
 def extract_all_local_images(content):
     images = []
-    
+
     # Extract images from all supported formats
     images.extend(MARKDOWN_IMAGE_PATTERN.findall(content))
     images.extend(WIKILINK_IMAGE_PATTERN.findall(content))
     images.extend(VIMWIKI_IMAGE_PATTERN.findall(content))
-    
+
     # Filter out external URLs, keep only local relative/absolute paths
     local_images = []
     for img in images:
@@ -24,7 +24,7 @@ def extract_all_local_images(content):
                 local_images.append(parsed.path)
             else:
                 local_images.append(img)
-                
+
     # Remove duplicates
     return list(set(local_images))
 
@@ -42,7 +42,7 @@ def CopyWikiHandle(args):
         content = f.read()
 
     local_images = extract_all_local_images(content)
-    
+
     # We resolve image paths relative to the source wiki file's directory
     source_dir = source_file.parent
 
@@ -51,7 +51,7 @@ def CopyWikiHandle(args):
         # If absolute path is used, we might want to just copy it to dest directly,
         # but usually vimwiki links are relative.
         img_path = Path(urllib.parse.unquote(img_path_str))
-        
+
         # We only copy if it exists relative to the source document or is absolute and exists
         actual_img_path = source_dir / img_path if not img_path.is_absolute() else img_path
 
@@ -62,7 +62,7 @@ def CopyWikiHandle(args):
                 target_img_path = dest_dir / img_path
             else:
                 target_img_path = dest_dir / actual_img_path.name
-                
+
             target_img_path.parent.mkdir(parents=True, exist_ok=True)
             try:
                 shutil.copy2(actual_img_path, target_img_path)
@@ -75,23 +75,33 @@ def CopyWikiHandle(args):
     if args.convert_md or args.convert_vimwiki:
         try:
             import pypandoc
-            
+
             if args.convert_md:
                 # Source is vimwiki, dest is md
                 dest_file = dest_dir / (source_file.stem + '.md')
                 pypandoc.convert_file(
-                    str(source_file), 
-                    'markdown', 
-                    format='vimwiki', 
+                    str(source_file),
+                    'markdown',
+                    format='vimwiki',
                     outputfile=str(dest_file)
                 )
+
+                import re
+                with open(dest_file, 'r', encoding='utf-8') as f:
+                    md_text = f.read()
+
+                # Post-process to remove extensive whitespace after bullet points
+                md_text = re.sub(r'^(\s*-)\s{2,}', r'\1  ', md_text, flags=re.MULTILINE)
+
+                with open(dest_file, 'w', encoding='utf-8') as f:
+                    f.write(md_text)
             elif args.convert_vimwiki:
                 # Source is markdown, dest is vimwiki
                 dest_file = dest_dir / (source_file.stem + '.wiki')
                 pypandoc.convert_file(
-                    str(source_file), 
-                    'vimwiki', 
-                    format='markdown', 
+                    str(source_file),
+                    'vimwiki',
+                    format='markdown',
                     outputfile=str(dest_file)
                 )
 
