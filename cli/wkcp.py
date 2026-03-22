@@ -15,7 +15,7 @@ def main():
     # parser_text = subparsers.add_parser("text", help="Handle text")
     parser_download = subparsers.add_parser("download", help="Download attachments")
     parser_filename = subparsers.add_parser("filename", help="Generate filename")
-    parser_copywiki = subparsers.add_parser("copywiki", help="Copy vimwiki file, optionally convert to markdown and copy referenced images")
+    parser_copywiki = subparsers.add_parser("copywiki", help="Copy vimwiki/markdown file and all referenced local images to destination folder, optionally convert to vimwiki/markdown")
 
     parser_image.add_argument("--copypath", dest="copypath", default=False, action='store_true',
                               required=False, help="Copy extracted image path to clipboard")
