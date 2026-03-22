@@ -5,6 +5,7 @@ from wkcp.text import TextHandle
 from wkcp.image import ImageHandle
 from wkcp.download import DownloadHandle
 from wkcp.copywiki import CopyWikiHandle
+from wkcp.deletewiki import DeleteWikiHandle
 from wkcp.utils import build_filename
 
 
@@ -16,6 +17,7 @@ def main():
     parser_download = subparsers.add_parser("download", help="Download attachments")
     parser_filename = subparsers.add_parser("filename", help="Generate filename")
     parser_copywiki = subparsers.add_parser("copywiki", help="Copy vimwiki/markdown file and all referenced local images to destination folder, optionally convert to vimwiki/markdown")
+    parser_deletewiki = subparsers.add_parser("deletewiki", help="Delete vimwiki/markdown file and all referenced local images")
 
     parser_image.add_argument("--copypath", dest="copypath", default=False, action='store_true',
                               required=False, help="Copy extracted image path to clipboard")
@@ -62,6 +64,8 @@ def main():
     parser_copywiki.add_argument("--convert-md", dest="convert_md", action="store_true", help="Convert source to markdown using pandoc")
     parser_copywiki.add_argument("--convert-vimwiki", dest="convert_vimwiki", action="store_true", help="Convert source to vimwiki using pandoc")
 
+    parser_deletewiki.add_argument("--file", dest="file", required=True, help="Path to markdown/vimwiki file")
+
     args = parser.parse_args()
 
     if args.command == "image":
@@ -78,3 +82,6 @@ def main():
 
     elif args.command == "copywiki":
         CopyWikiHandle(args)
+
+    elif args.command == "deletewiki":
+        DeleteWikiHandle(args)
