@@ -73,6 +73,7 @@ def CopyWikiHandle(args):
             target_img_path.parent.mkdir(parents=True, exist_ok=True)
             try:
                 shutil.copy2(actual_img_path, target_img_path)
+                print(f"Referenced image copied: {actual_img_path} -> {target_img_path}")
             except Exception as e:
                 print(f"Warning: Failed to copy image {actual_img_path} to {target_img_path}: {e}")
         else:

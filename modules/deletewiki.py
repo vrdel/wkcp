@@ -30,7 +30,7 @@ def DeleteWikiHandle(args):
         if actual_img_path.exists() and actual_img_path.is_file():
             try:
                 actual_img_path.unlink()
-                print(f"Deleted image: {actual_img_path}")
+                print(f"Referenced image deleted: {actual_img_path}")
             except Exception as e:
                 print(f"Warning: Failed to delete image {actual_img_path}: {e}")
         else:
@@ -39,6 +39,6 @@ def DeleteWikiHandle(args):
     # Delete the wiki file itself
     try:
         source_file.unlink()
-        print(f"Deleted file: {source_file}")
+        print(f"Wiki file deleted: {source_file}")
     except Exception as e:
         print(f"Error: Failed to delete file {source_file}: {e}")
