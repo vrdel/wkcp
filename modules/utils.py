@@ -77,7 +77,7 @@ def build_image_filename(path, prefix=None, microsec=True):
         return f"{prefix}-{datetime_string}{extension}"
 
 
-def build_filename(path, prefix=None, microsec=True):
+def build_filename(path, prefix=None, microsec=True, snake_case=False, kebab_case=False):
     extension = Path(path).suffix.lower()
     parent = Path(path).parent
     now = datetime.now()
@@ -85,6 +85,14 @@ def build_filename(path, prefix=None, microsec=True):
         datetime_string = now.strftime("%y%m%d-%H%M%S-%f")
     else:
         datetime_string = now.strftime("%y%m%d-%H%M%S")
+
+    if prefix:
+        if snake_case:
+            prefix = re.sub(r'\s+', '_', prefix)
+            prefix = re.sub(r'[^a-zA-Z0-9_]', '', prefix)
+        elif kebab_case:
+            prefix = re.sub(r'\s+', '-', prefix)
+            prefix = re.sub(r'[^a-zA-Z0-9\-]', '', prefix)
 
     if not prefix:
         if parent != PosixPath('.'):
