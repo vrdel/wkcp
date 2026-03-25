@@ -65,7 +65,7 @@ def main():
     parser_filename.add_argument("--lower", dest="lower", action="store_true",
                                  default=False, required=False, help="Make prefix/suffix lowercase")
     parser_filename.add_argument("--path", dest="extpath", default=False,
-                                 required=True, help="File path whose extension will be extracted")
+                                 required=False, help="File path whose extension will be extracted")
 
     parser_copywiki.add_argument("--file", dest="file", required=True, help="Path to markdown/vimwiki file")
     parser_copywiki.add_argument("--dest", dest="dest", required=True, help="Destination folder")

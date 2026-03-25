@@ -77,11 +77,15 @@ def build_image_filename(path, prefix=None, microsec=True):
         return f"{prefix}-{datetime_string}{extension}"
 
 
-def build_filename(path, prefix=None, suffix=None, microsec=True,
+def build_filename(path=None, prefix=None, suffix=None, microsec=True,
                    timestamp=False, snake_case=False, kebab_case=False,
                    lower=False):
-    extension = Path(path).suffix.lower()
-    parent = Path(path).parent
+    if path:
+        extension = Path(path).suffix.lower()
+        parent = Path(path).parent
+    else:
+        extension = ""
+        parent = PosixPath('.')
     now = datetime.now()
     if microsec and timestamp:
         datetime_string = now.strftime("%y%m%d-%H%M%S-%f")
