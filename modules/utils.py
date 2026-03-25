@@ -77,30 +77,44 @@ def build_image_filename(path, prefix=None, microsec=True):
         return f"{prefix}-{datetime_string}{extension}"
 
 
-def build_filename(path, prefix=None, microsec=True, snake_case=False, kebab_case=False):
+def build_filename(path, prefix=None, suffix=None, microsec=True, timestamp=False, snake_case=False, kebab_case=False):
     extension = Path(path).suffix.lower()
     parent = Path(path).parent
     now = datetime.now()
-    if microsec:
+    if microsec and timestamp:
         datetime_string = now.strftime("%y%m%d-%H%M%S-%f")
-    else:
+    elif timestamp:
         datetime_string = now.strftime("%y%m%d-%H%M%S")
+    else:
+        datetime_string = now.strftime("%y%m%d-")
+
+    def format_str(s):
+        if snake_case:
+            s = re.sub(r'\s+', '_', s)
+            s = re.sub(r'[^a-zA-Z0-9_]', '', s)
+        elif kebab_case:
+            s = re.sub(r'\s+', '-', s)
+            s = re.sub(r'[^a-zA-Z0-9\-]', '', s)
+        return s
 
     if prefix:
-        if snake_case:
-            prefix = re.sub(r'\s+', '_', prefix)
-            prefix = re.sub(r'[^a-zA-Z0-9_]', '', prefix)
-        elif kebab_case:
-            prefix = re.sub(r'\s+', '-', prefix)
-            prefix = re.sub(r'[^a-zA-Z0-9\-]', '', prefix)
+        prefix = format_str(prefix)
 
-    if not prefix:
-        if parent != PosixPath('.'):
-            return f"{str(parent)}/wkcp-di-{datetime_string}{extension}"
-        else:
-            return f"wkcp-di-{datetime_string}{extension}"
+    if suffix:
+        suffix = format_str(suffix)
+
+    if prefix and suffix:
+        file_name = f"{prefix}-{datetime_string}-{suffix}{extension}"
+    elif prefix:
+        file_name = f"{prefix}-{datetime_string}{extension}"
+    elif suffix:
+        file_name = f"{datetime_string}-{suffix}{extension}"
+
+    if not (prefix or suffix):
+        base_name = "wkcp-di"
+        file_name = f"{base_name}-{datetime_string}{extension}"
+
+    if parent != PosixPath('.'):
+        return f"{str(parent)}/{file_name}"
     else:
-        if parent != PosixPath('.'):
-            return f"{str(parent)}/{prefix}-{datetime_string}{extension}"
-        else:
-            return f"{prefix}-{datetime_string}{extension}"
+        return file_name

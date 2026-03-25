@@ -2,27 +2,26 @@
 name = "wkcp"
 dynamic = ["version"]
 dependencies = [
-	"copykitten==2.0.0",
-	"pillow==12.0.0",
-	"aiohttp==3.13.2",
-	"pypandoc==1.13"
+    "copykitten==2.0.0",
+    "pillow==12.0.0",
+    "aiohttp==3.13.2",
+    "pypandoc==1.13"
 ]
 authors = [
-	{ name = "Daniel Vrcic", email = "daniel.vrcic@gmail.com" }
+    { name = "Daniel Vrcic", email = "daniel.vrcic@gmail.com" }
 ]
 description = """
-		Helper tool to manage Markdown and Vimwiki image attachment and links.
-    Tool downloads images from remote URLs in Markdown and Vimwiki files,
-    place images in same directory where file resides and converts remote
-    URL to local Markdown/Vimwiki link referencing local image.
-    Additionally it can copy image to clipboard from local Markdown/Vimwiki
-    link or paste the image from clipboard with auto-generated
-    filename and Markdown/Vimwiki local link.
+    Helper tool to manage Markdown and Vimwiki image attachment and links. It
+    downloads images from remote URLs referenced in Markdown and Vimwiki files,
+    place images in same directory where file resides and converts remote URL to
+    local Markdown/Vimwiki link referencing local image. Additionally it can copy
+    image to clipboard from local Markdown/Vimwiki link or paste the image from
+    clipboard with auto-generated filename and Markdown/Vimwiki local link.
 """
 classifiers = [
-	"License :: OSI Approved :: Apache Software License",
-	"Operating System :: POSIX",
-	"Programming Language :: Python :: 3.14",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3.14",
 ]
 
 [build-system]
@@ -52,8 +51,8 @@ wkcp = 'wkcp.cli.wkcp:main'
 
 [tool.setuptools]
 packages = [
-	'wkcp',
-	'wkcp.cli'
+    'wkcp',
+    'wkcp.cli'
 ]
 include-package-data = true
 

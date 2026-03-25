@@ -56,10 +56,12 @@ def main():
 
     parser_filename.add_argument("--prefix", dest="customprefix", default=False,
                                  required=False, help="Build filename with custom prefix")
+    parser_filename.add_argument("--suffix", dest="customsuffix", default=False,
+                                 required=False, help="Build filename with custom suffix")
     parser_filename.add_argument("--snake-case", dest="snake_case", action="store_true",
-                                 default=False, required=False, help="Format prefix as snake_case")
+                                 default=False, required=False, help="Format prefix/suffix as snake_case")
     parser_filename.add_argument("--kebab-case", dest="kebab_case", action="store_true",
-                                 default=False, required=False, help="Format prefix as kebab-case")
+                                 default=False, required=False, help="Format prefix/suffix as kebab-case")
     parser_filename.add_argument("--path", dest="extpath", default=False,
                                  required=True, help="File path whose extension will be extracted")
 
@@ -82,7 +84,7 @@ def main():
         DownloadHandle(args)
 
     elif args.command == "filename":
-        sys.stdout.write(build_filename(args.extpath, args.customprefix, microsec=False, snake_case=args.snake_case, kebab_case=args.kebab_case))
+        sys.stdout.write(build_filename(args.extpath, prefix=args.customprefix, suffix=args.customsuffix, microsec=False, snake_case=args.snake_case, kebab_case=args.kebab_case))
 
     elif args.command == "copywiki":
         CopyWikiHandle(args)
