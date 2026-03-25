@@ -64,8 +64,11 @@ def contains_exception(list):
     return (False, None)
 
 
-def build_image_filename(path, prefix=None, microsec=True):
-    extension = Path(path).suffix.lower()
+def build_image_filename(path, prefix=None, microsec=True, ext_override=None):
+    if ext_override:
+        extension = ext_override if ext_override.startswith('.') else f".{ext_override}"
+    else:
+        extension = Path(path).suffix.lower()
     now = datetime.now()
     if microsec:
         datetime_string = now.strftime("%y%m%d-%H%M%S-%f")

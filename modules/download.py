@@ -31,7 +31,25 @@ class DownloadHandle:
         try:
             async with session.get(url) as response:
                 parsed_url = urlparse(url)
-                image_filename = build_image_filename(parsed_url.path)
+                
+                ext = Path(parsed_url.path).suffix.lower()
+                if not ext:
+                    from urllib.parse import parse_qs
+                    query_params = parse_qs(parsed_url.query)
+                    if 'format' in query_params:
+                        ext = f".{query_params['format'][0].lower()}"
+                
+                if not ext:
+                    import mimetypes
+                    content_type = response.headers.get('Content-Type', '')
+                    if content_type:
+                        guessed_ext = mimetypes.guess_extension(content_type)
+                        if guessed_ext:
+                            if guessed_ext == ".jpe":
+                                guessed_ext = ".jpg"
+                            ext = guessed_ext
+
+                image_filename = build_image_filename(parsed_url.path, ext_override=ext)
                 content = await response.content.read()
                 if Path(self.args.file[0]).parent == PosixPath('.'):
                     self._write_content_file(content, image_filename)
