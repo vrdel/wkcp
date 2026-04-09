@@ -16,6 +16,14 @@ The project uses Poetry/Setuptools for dependency management.
 
 There is also a provided `docker-run-wkcp.py` script which acts as a wrapper for running `wkcp` inside a Docker container. It automatically mounts directories of any absolute file paths passed as arguments and passes through the X11 socket (allowing clipboard access with `copykitten` via Docker) while using the host network.
 
+To rebuild the container, run the following command:
+
+```bash
+make clean && make wheel-devel && docker build --no-cache . -f Dockerfile -t wkcp
+```
+
+This will install the `wkcp` tool in the container environment, which is later used with the wrapper script from the host.
+
 ## CLI Usage and Subcommands
 
 `wkcp [command] [options]`
