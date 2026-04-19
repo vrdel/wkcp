@@ -6,6 +6,7 @@ from wkcp.image import ImageHandle
 from wkcp.download import DownloadHandle
 from wkcp.copywiki import CopyWikiHandle
 from wkcp.deletewiki import DeleteWikiHandle
+from wkcp.extractembedded import ExtractEmbeddedHandle
 from wkcp.utils import build_filename
 
 
@@ -18,6 +19,7 @@ def main():
     parser_filename = subparsers.add_parser("filename", help="Generate filename")
     parser_copywiki = subparsers.add_parser("copywiki", help="Copy vimwiki/markdown file and all referenced local images to destination folder, optionally convert to vimwiki/markdown")
     parser_deletewiki = subparsers.add_parser("deletewiki", help="Delete vimwiki/markdown file and all referenced local images")
+    parser_extractembedded = subparsers.add_parser("extract-embedded", help="Extract embedded base64 images from markdown file")
 
     parser_image.add_argument("--copypath", dest="copypath", default=False, action='store_true',
                               required=False, help="Copy extracted image path to clipboard")
@@ -75,6 +77,7 @@ def main():
     parser_copywiki.add_argument("--convert-vimwiki", dest="convert_vimwiki", action="store_true", help="Convert source to vimwiki using pandoc")
 
     parser_deletewiki.add_argument("--file", dest="file", required=True, help="Path to markdown/vimwiki file")
+    parser_extractembedded.add_argument("--file", dest="file", required=True, help="Path to markdown/vimwiki file")
 
     args = parser.parse_args()
 
@@ -99,3 +102,6 @@ def main():
 
     elif args.command == "deletewiki":
         DeleteWikiHandle(args)
+
+    elif args.command == "extract-embedded":
+        ExtractEmbeddedHandle(args)
