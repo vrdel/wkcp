@@ -64,6 +64,10 @@ Copy a Vimwiki/Markdown file along with all referenced local images to a destina
 - `--convert-md`: Convert the source file to Markdown using Pandoc.
 - `--convert-vimwiki`: Convert the source file to Vimwiki using Pandoc.
 
+### `extract-embedded` (Extract Embedded Base64 Images)
+Extract embedded base64 images from a Markdown file, save them as local image files, and replace the base64 payloads with standard local file references.
+- `--file <path>`: Path to the markdown file containing embedded base64 images.
+
 ### `deletewiki` (Delete Wiki Files)
 Delete a Vimwiki/Markdown file and all the local images it references from the disk.
 - `--file <path>`: Path to the markdown/vimwiki file.
