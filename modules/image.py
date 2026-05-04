@@ -35,7 +35,9 @@ def ImageHandle(args):
         image_path = copykitten.paste()
         try:
             shutil.copy2(image_path, os.getcwd())
-            if args.pastepathmarkdownwikilink:
+            if getattr(args, 'pasteplain', False):
+                print(os.path.basename(image_path))
+            elif args.pastepathmarkdownwikilink:
                 print("![[{0}]]".format(os.path.basename(image_path)))
             elif args.pastepathvimwiki:
                 print("{{myimg:{0}}}".format(os.path.basename(image_path)))
@@ -53,7 +55,9 @@ def ImageHandle(args):
             image_filename = f"wkcp-pi-{datetime_string}.png"
             image.save(image_filename)
             try:
-                if args.pastepathmarkdownwikilink:
+                if getattr(args, 'pasteplain', False):
+                    print(os.path.basename(image_filename))
+                elif args.pastepathmarkdownwikilink:
                     print("![[{0}]]".format(os.path.basename(image_filename)))
                 elif args.pastepathvimwiki:
                     print("{{" + "myimg:{0}".format(os.path.basename(image_filename)) + "}}")

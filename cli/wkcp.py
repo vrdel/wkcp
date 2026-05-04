@@ -35,6 +35,8 @@ def main():
                               required=False, help="Build markdown image link")
     parser_image.add_argument("-mw", dest="pastepathmarkdownwikilink", default=False, action='store_true',
                               required=False, help="Build markdown image wikilink")
+    parser_image.add_argument("-p", "--pasteplain", dest="pasteplain", default=False, action='store_true',
+                              required=False, help="Print plain filename without markdown or vimwiki link formatting")
     parser_image.add_argument("--copyimg", dest="copyimg", default=False, action='store_true',
                               required=False, help="Copy image content to clipboard")
     parser_image.add_argument("--link", dest="wikilink", nargs='+',
