@@ -19,7 +19,7 @@ There is also a provided `docker-run-wkcp.py` script which acts as a wrapper for
 To rebuild the container, run the following command:
 
 ```bash
-make clean && make wheel-devel && docker build --no-cache . -f Dockerfile -t wkcp
+make clean && make wheel-devel && docker build --no-cache --build-arg TZ="$(cat /etc/timezone)" . -f Dockerfile -t wkcp
 ```
 
 This will install the `wkcp` tool in the container environment, which is later used with the wrapper script from the host.

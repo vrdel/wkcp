@@ -4,6 +4,28 @@ import os
 import sys
 
 
+def host_timezone():
+    if os.environ.get("TZ"):
+        return os.environ["TZ"]
+
+    try:
+        with open("/etc/timezone", "r", encoding="utf-8") as fp:
+            timezone = fp.read().strip()
+            if timezone:
+                return timezone
+    except OSError:
+        pass
+
+    localtime = "/etc/localtime"
+    if os.path.islink(localtime):
+        zoneinfo_prefix = "/usr/share/zoneinfo/"
+        target = os.path.realpath(localtime)
+        if target.startswith(zoneinfo_prefix):
+            return target[len(zoneinfo_prefix):]
+
+    return None
+
+
 def main():
     args = sys.argv[1:]
 
@@ -25,6 +47,14 @@ def main():
         "-e", f"DISPLAY={os.environ.get('DISPLAY', '')}",
         "-v", "/tmp/.X11-unix:/tmp/.X11-unix"
     ]
+
+    timezone = host_timezone()
+    if timezone:
+        cmd.extend(["-e", f"TZ={timezone}"])
+    if os.path.exists("/etc/localtime"):
+        cmd.extend(["-v", "/etc/localtime:/etc/localtime:ro"])
+    if os.path.exists("/etc/timezone"):
+        cmd.extend(["-v", "/etc/timezone:/etc/timezone:ro"])
 
     # If files were referenced via absolute path, mount their directories
     for dir_mount in filemounts:
