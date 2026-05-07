@@ -5,7 +5,7 @@ import shutil
 from datetime import datetime
 from PIL import Image
 
-from wkcp.utils import extract_imgpaths
+from wkcp.utils import extract_delete_imgpaths, extract_imgpaths
 
 
 def ImageHandle(args):
@@ -69,10 +69,11 @@ def ImageHandle(args):
             pass
 
     elif args.deleteimg:
-        image_path = extract_imgpaths(preprocess_links)
+        image_path = extract_delete_imgpaths(preprocess_links)
         if image_path:
-            try:
-                os.remove(image_path)
-                print("DELETED")
-            except FileNotFoundError:
-                pass
+            for image in image_path.split("\n"):
+                try:
+                    os.remove(image)
+                    print("DELETED")
+                except FileNotFoundError:
+                    pass

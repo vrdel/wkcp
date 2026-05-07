@@ -7,6 +7,10 @@ from pathlib import Path, PosixPath
 MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
 WIKILINK_IMAGE_PATTERN = re.compile(r'!\[\[(.*?)\]\]')
 VIMWIKI_IMAGE_PATTERN = re.compile(r'\{\{myimg:(.*?)\}\}')
+PLAIN_DELETE_IMAGE_PATTERN = re.compile(
+    r'^\s*(?:-\s*)?(?:image\s*:\s*)?(?P<path>.+?\.(?:jpe?g|png|svg))\s*$',
+    re.IGNORECASE,
+)
 
 
 def _prepend_path(path_array):
@@ -46,6 +50,27 @@ def extract_imgpaths(links, path=True):
 
 def extract_img(links):
     return extract_imgpaths(links, path=False)
+
+
+def extract_delete_imgpaths(links, path=True):
+    image_path = extract_imgpaths(links, path=path)
+    if image_path:
+        return image_path
+
+    text = ' '.join(links)
+    image_paths = list()
+    for line in text.splitlines():
+        match = PLAIN_DELETE_IMAGE_PATTERN.match(line.strip('"\''))
+        if match:
+            image_paths.append(match.group('path').strip().strip('"\''))
+
+    if not image_paths:
+        return None
+
+    if path:
+        return _prepend_path(image_paths)
+
+    return '\n'.join(image_paths)
 
 
 def merge_dicts(dict_list):
