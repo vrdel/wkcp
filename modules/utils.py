@@ -7,7 +7,7 @@ from pathlib import Path, PosixPath
 MARKDOWN_IMAGE_PATTERN = re.compile(r'!\[.*?\]\((.*?)\)')
 WIKILINK_IMAGE_PATTERN = re.compile(r'!\[\[(.*?)\]\]')
 VIMWIKI_IMAGE_PATTERN = re.compile(r'\{\{myimg:(.*?)\}\}')
-PLAIN_DELETE_IMAGE_PATTERN = re.compile(
+PLAIN_IMAGE_PATTERN = re.compile(
     r'^\s*(?:-\s*)?(?:image\s*:\s*)?(?P<path>.+?\.(?:jpe?g|png|svg))\s*$',
     re.IGNORECASE,
 )
@@ -23,54 +23,44 @@ def _prepend_path(path_array):
     return '\n'.join(temp_ip)
 
 
+def _format_imgpaths(image_path, path=True):
+    if path:
+        return _prepend_path(image_path)
+    return '\n'.join(image_path)
+
+
+def _extract_plain_imgpaths(links):
+    text = ' '.join(links)
+    image_paths = list()
+    for line in text.splitlines():
+        match = PLAIN_IMAGE_PATTERN.match(line.strip('"\''))
+        if match:
+            image_paths.append(match.group('path').strip().strip('"\''))
+    return image_paths
+
+
 def extract_imgpaths(links, path=True):
     image_path = MARKDOWN_IMAGE_PATTERN.findall(''.join(links))
     if image_path:
-        if path:
-            return _prepend_path(image_path)
-        else:
-            return '\n'.join(image_path)
+        return _format_imgpaths(image_path, path=path)
     else:
         image_path = WIKILINK_IMAGE_PATTERN.findall(''.join(links))
         if image_path:
-            if path:
-                return _prepend_path(image_path)
-            else:
-                return '\n'.join(image_path)
+            return _format_imgpaths(image_path, path=path)
         else:
             image_path = VIMWIKI_IMAGE_PATTERN.findall(''.join(links))
             if image_path:
-                if path:
-                    return _prepend_path(image_path)
-                else:
-                    return '\n'.join(image_path)
+                return _format_imgpaths(image_path, path=path)
+
+    image_path = _extract_plain_imgpaths(links)
+    if image_path:
+        return _format_imgpaths(image_path, path=path)
 
     return None
 
 
 def extract_img(links):
     return extract_imgpaths(links, path=False)
-
-
-def extract_delete_imgpaths(links, path=True):
-    image_path = extract_imgpaths(links, path=path)
-    if image_path:
-        return image_path
-
-    text = ' '.join(links)
-    image_paths = list()
-    for line in text.splitlines():
-        match = PLAIN_DELETE_IMAGE_PATTERN.match(line.strip('"\''))
-        if match:
-            image_paths.append(match.group('path').strip().strip('"\''))
-
-    if not image_paths:
-        return None
-
-    if path:
-        return _prepend_path(image_paths)
-
-    return '\n'.join(image_paths)
 
 
 def merge_dicts(dict_list):

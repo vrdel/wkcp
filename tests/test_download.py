@@ -14,6 +14,7 @@ class ImageLinksExtract(unittest.IsolatedAsyncioTestCase):
         args = mock.Mock()
         args.file = ["tests/251226-the-state-of-python-2025-trends-and-survey-insights--the-py-charm-blog.md"]
         self.dh = DownloadHandle(args)
+        self.maxDiff = None
 
     def test(self):
         self.assertEqual(self.dh.image_links, [

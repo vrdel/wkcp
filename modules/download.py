@@ -31,14 +31,14 @@ class DownloadHandle:
         try:
             async with session.get(url) as response:
                 parsed_url = urlparse(url)
-                
+
                 ext = Path(parsed_url.path).suffix.lower()
                 if not ext:
                     from urllib.parse import parse_qs
                     query_params = parse_qs(parsed_url.query)
                     if 'format' in query_params:
                         ext = f".{query_params['format'][0].lower()}"
-                
+
                 if not ext:
                     import mimetypes
                     content_type = response.headers.get('Content-Type', '')
@@ -110,5 +110,4 @@ class DownloadHandle:
             raise SystemExit(1)
 
         local_files = merge_dicts(local_files)
-
         self._replace_with_local_links(local_files)
